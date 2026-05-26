@@ -44,6 +44,7 @@ Thumbs.db
 *.sqlite3
 
 # Pandas / generated exports
+.csv
 *.xlsx
 
 # Logs
