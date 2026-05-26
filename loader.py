@@ -51,4 +51,4 @@ def load_all():
 
 
 def loadPrice():
-    return load_all()["M1"]
+    return load_all()
