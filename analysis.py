@@ -66,7 +66,7 @@ def prepare(df):
     return df
 
 
-def main():
+def run_analysis(save_csv=False, csv_name="XAU_USD_multi_timeframe.csv"):
     data = load_all()
 
     for tf, df in data.items():
@@ -84,14 +84,40 @@ def main():
 
     valid_rows = merged.index[20:][X.index]
 
-    cluster_model.fit(X)
+    model, labels = cluster_model.fit(X)
     similar = similarity_search.search(X)
 
-    correlation.analyze(merged)
-    tf_similarity.search(merged)
+    correlations = correlation.analyze(merged)
+    tf_similarity_idx = tf_similarity.search(merged)
 
-    print(merged.loc[valid_rows[similar], ["UTC", "Close", "COMPRESSION", "VOL_REGIME"]])
-    merged.to_csv("XAU_USD_multi_timeframe.csv", index=False)
+    similar_rows = merged.loc[valid_rows[similar], [
+        "UTC",
+        "Close",
+        "COMPRESSION",
+        "VOL_REGIME",
+        "TF_BULL_STACK",
+        "TF_BEAR_STACK",
+    ]].copy()
+
+    if save_csv:
+        merged.to_csv(csv_name, index=False)
+
+    return {
+        "data": data,
+        "merged": merged,
+        "model": model,
+        "labels": labels,
+        "similar_indices": similar,
+        "similar_rows": similar_rows,
+        "tf_similarity_indices": tf_similarity_idx,
+        "correlations": correlations,
+    }
+
+
+def main():
+    result = run_analysis(save_csv=True)
+    print(result["similar_rows"])
+    return result
 
 
 if __name__ == "__main__":

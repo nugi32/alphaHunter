@@ -3,7 +3,7 @@ def apply(df):
 
     for p in [14, 20]:
         sma = tp.rolling(p).mean()
-        mad = tp.rolling(p).apply(lambda x: abs(x - x.mean()).mean())
+        mad = (tp - sma).abs().rolling(p).mean()
 
         df[f"CCI_{p}"] = (tp - sma) / (0.015 * mad)
 

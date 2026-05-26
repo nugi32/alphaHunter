@@ -39,7 +39,7 @@ modules = [
     advanced,
 ]
 
-
+"""
 def main():
     df = loadPrice()
 
@@ -48,6 +48,24 @@ def main():
 
     print(df.tail())
     df.to_csv("XAU_USD_all_indicators.csv", index=False)
+
+
+if __name__ == "__main__":
+    main()
+"""
+
+
+def main():
+    data = loadPrice()
+
+    for tf, df in data.items():
+        for module in modules:
+            df = module.apply(df)
+
+        print(f"\n=== {tf} ===")
+        print(df.tail())
+
+        df.to_csv(f"XAU_USD_{tf}_all_indicators.csv", index=False)
 
 
 if __name__ == "__main__":

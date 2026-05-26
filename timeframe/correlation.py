@@ -5,7 +5,11 @@ def analyze(df):
         ("ATR_14", "H4_ATR_14"),
     ]
 
+    results = {}
+
     for a, b in pairs:
         if a in df.columns and b in df.columns:
             corr = df[a].corr(df[b])
-            print(a, b, corr)
+            results[f"{a}__{b}"] = corr
+
+    return results
