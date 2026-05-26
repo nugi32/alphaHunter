@@ -45,6 +45,7 @@ Thumbs.db
 
 # Pandas / generated exports
 *.csv
+data/XAUUSD/*.csv
 *.xlsx
 
 # Logs
