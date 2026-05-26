@@ -1,4 +1,10 @@
-from loader import load_all
+import argparse
+import gc
+
+import numpy as np
+import pandas as pd
+
+from loader import load_tf
 
 from indicators import (
     adx,
@@ -28,7 +34,7 @@ from patterns import (
     window_builder,
 )
 
-from timeframe import correlation, merge, trend_context, tf_similarity
+from timeframe import correlation
 
 indicator_modules = [
     trend_ma,
@@ -66,18 +72,117 @@ def prepare(df):
     return df
 
 
-def run_analysis(save_csv=False, csv_name="XAU_USD_multi_timeframe.csv"):
-    data = load_all()
+def _cleanup():
+    gc.collect()
 
-    for tf, df in data.items():
-        data[tf] = prepare(df)
 
-    merged = data["M1"]
+def _parse_scalar(value):
+    raw = str(value).strip()
 
-    for tf in ["M5", "M15", "H1", "H4", "D1"]:
-        merged = merge.merge(merged, data[tf], tf)
+    if raw.lower() in {"true", "false"}:
+        return raw.lower() == "true"
 
-    merged = trend_context.apply(merged)
+    try:
+        if "." in raw:
+            return float(raw)
+
+        return int(raw)
+    except ValueError:
+        return raw
+
+
+def _parse_condition(condition):
+    condition = condition.strip()
+
+    for operator in (">=", "<=", "==", "!=", ">", "<"):
+        if operator in condition:
+            column, raw = condition.split(operator, 1)
+            value = _parse_scalar(raw)
+
+            column = column.strip()
+
+            if operator == ">=":
+                return column, lambda s, v=value: s >= v
+            if operator == "<=":
+                return column, lambda s, v=value: s <= v
+            if operator == "==":
+                return column, lambda s, v=value: s == v
+            if operator == "!=":
+                return column, lambda s, v=value: s != v
+            if operator == ">":
+                return column, lambda s, v=value: s > v
+            if operator == "<":
+                return column, lambda s, v=value: s < v
+
+    raise ValueError(f"Unsupported condition: {condition}")
+
+
+def _build_pattern_mask(df, pattern_spec):
+    if not pattern_spec:
+        return pd.Series(False, index=df.index)
+
+    mask = pd.Series(True, index=df.index)
+
+    for condition in pattern_spec.split(","):
+        column, predicate = _parse_condition(condition)
+        mask &= predicate(df[column])
+
+    return mask.fillna(False)
+
+
+def _pattern_summary(df, pattern_spec):
+    mask = _build_pattern_mask(df, pattern_spec)
+    hits = df.loc[mask].copy()
+    price_move = hits["Close"] - hits["Open"]
+
+    if hits.empty:
+        return {
+            "pattern": pattern_spec,
+            "count": 0,
+            "price_move_mean": None,
+            "price_move_median": None,
+            "price_move_min": None,
+            "price_move_max": None,
+            "bull_count": 0,
+            "bear_count": 0,
+            "flat_count": 0,
+            "sample_rows": hits.head(10),
+        }
+
+    # Get all available indicator columns
+    indicator_cols = [col for col in hits.columns if col not in ["UTC", "Open", "High", "Low", "Close", "Volume", "Date", "Time"]]
+    
+    result = {
+        "pattern": pattern_spec,
+        "count": int(mask.sum()),
+        "price_move_mean": float(price_move.mean()),
+        "price_move_median": float(price_move.median()),
+        "price_move_min": float(price_move.min()),
+        "price_move_max": float(price_move.max()),
+        "price_move_std": float(price_move.std()),
+        "bull_count": int((price_move > 0).sum()),
+        "bear_count": int((price_move < 0).sum()),
+        "flat_count": int((price_move == 0).sum()),
+        "bullish_percentage": float((price_move > 0).sum() / len(price_move) * 100) if len(price_move) > 0 else 0,
+        "bearish_percentage": float((price_move < 0).sum() / len(price_move) * 100) if len(price_move) > 0 else 0,
+    }
+    
+    # Add detailed sample rows with indicator values
+    sample_rows = hits[["UTC", "Open", "Close", "High", "Low", "Volume"] + indicator_cols].head(10).copy()
+    sample_rows["PriceMove"] = sample_rows["Close"] - sample_rows["Open"]
+    result["sample_rows"] = sample_rows
+    
+    return result
+
+
+def run_analysis(save_csv=False, csv_name="XAU_USD_single_timeframe.csv", timeframe="M1", pattern_spec=None):
+    df = load_tf(timeframe, limit=None)
+    df = prepare(df)
+    _cleanup()
+
+    merged = df.copy()
+    merged["TF_BULL_STACK"] = float("nan")
+    merged["TF_BEAR_STACK"] = float("nan")
 
     X = window_builder.build(merged)
     X = X.dropna()
@@ -88,34 +193,84 @@ def run_analysis(save_csv=False, csv_name="XAU_USD_multi_timeframe.csv"):
     similar = similarity_search.search(X)
 
     correlations = correlation.analyze(merged)
-    tf_similarity_idx = tf_similarity.search(merged)
 
-    similar_rows = merged.loc[valid_rows[similar], [
-        "UTC",
-        "Close",
-        "COMPRESSION",
-        "VOL_REGIME",
-        "TF_BULL_STACK",
-        "TF_BEAR_STACK",
-    ]].copy()
+    similar_rows = merged.loc[
+        valid_rows[similar],
+        [
+            "UTC",
+            "Close",
+            "COMPRESSION",
+            "VOL_REGIME",
+            "TF_BULL_STACK",
+            "TF_BEAR_STACK",
+        ],
+    ].copy()
+
+    pattern_summary = _pattern_summary(merged, pattern_spec) if pattern_spec else None
+
+    del X
+    _cleanup()
 
     if save_csv:
         merged.to_csv(csv_name, index=False)
 
     return {
-        "data": data,
+        "data": {timeframe: merged},
         "merged": merged,
         "model": model,
         "labels": labels,
         "similar_indices": similar,
         "similar_rows": similar_rows,
-        "tf_similarity_indices": tf_similarity_idx,
+        "tf_similarity_indices": None,
         "correlations": correlations,
+        "pattern_summary": pattern_summary,
     }
 
 
 def main():
-    result = run_analysis(save_csv=True)
+    parser = argparse.ArgumentParser(description="Run alphaHunter analysis for a single timeframe")
+    parser.add_argument(
+        "--tf",
+        default="M1",
+        choices=["M1", "M5", "M15", "H1", "H4", "D1", "W1", "MN1"],
+        help="Timeframe to analyze",
+    )
+    parser.add_argument(
+        "--pattern",
+        default=None,
+        help="Pattern conditions to analyze, e.g. DOJI=1,COMPRESSION=1,VOL_REGIME=1 or RSI_14>70",
+    )
+
+    args = parser.parse_args()
+
+    result = run_analysis(save_csv=True, timeframe=args.tf, pattern_spec=args.pattern)
+
+    if result["pattern_summary"]:
+        summary = result["pattern_summary"]
+        print("\n" + "="*70)
+        print("PATTERN ANALYSIS RESULTS")
+        print("="*70)
+        print(f"\nTimeframe: {args.tf}")
+        print(f"Pattern Condition: {summary['pattern']}")
+        print(f"\n--- OCCURRENCE STATISTICS ---")
+        print(f"Total Occurrences: {summary['count']}")
+        if summary['count'] > 0:
+            print(f"Bullish (Close > Open): {summary['bull_count']} ({summary['bullish_percentage']:.2f}%)")
+            print(f"Bearish (Close < Open): {summary['bear_count']} ({summary['bearish_percentage']:.2f}%)")
+            print(f"Flat (Close = Open): {summary['flat_count']}")
+            print(f"\n--- PRICE MOVEMENT ANALYSIS ---")
+            print(f"Average Price Move: {summary['price_move_mean']:.6f}")
+            print(f"Median Price Move: {summary['price_move_median']:.6f}")
+            print(f"Std Dev Price Move: {summary['price_move_std']:.6f}")
+            print(f"Min Price Move: {summary['price_move_min']:.6f}")
+            print(f"Max Price Move: {summary['price_move_max']:.6f}")
+            print(f"\n--- DETAILED SAMPLE OCCURRENCES (showing up to 10 examples) ---")
+            print(summary["sample_rows"].to_string())
+        else:
+            print("No patterns found matching the condition.")
+        print("\n" + "="*70)
+
+    print("\n=== SIMILAR ROWS ===")
     print(result["similar_rows"])
     return result
 
