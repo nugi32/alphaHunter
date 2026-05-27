@@ -39,21 +39,6 @@ modules = [
     advanced,
 ]
 
-"""
-def main():
-    df = loadPrice()
-
-    for module in modules:
-        df = module.apply(df)
-
-    print(df.tail())
-    df.to_csv("XAU_USD_all_indicators.csv", index=False)
-
-
-if __name__ == "__main__":
-    main()
-"""
-
 
 def main():
     data = loadPrice()
