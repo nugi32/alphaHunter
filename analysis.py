@@ -61,12 +61,65 @@ pattern_modules = [
     market_structure,
 ]
 
+import sys
+import time
+import threading
+from contextlib import contextmanager
+from time import perf_counter
+
+
+def log_step(message):
+    print(f"[>] {message}", flush=True)
+
+
+@contextmanager
+def spinner(message="Processing"):
+    stop_event = threading.Event()
+
+    def animate():
+        frames = "|/-\\"
+        i = 0
+
+        while not stop_event.is_set():
+            sys.stdout.write(f"\r{message} {frames[i % len(frames)]}")
+            sys.stdout.flush()
+            time.sleep(0.1)
+            i += 1
+
+        sys.stdout.write(f"\r{message} ✓\n")
+        sys.stdout.flush()
+
+    thread = threading.Thread(target=animate, daemon=True)
+    thread.start()
+
+    try:
+        yield
+    finally:
+        stop_event.set()
+        thread.join()
+
+
+@contextmanager
+def timed_spinner(message):
+    start = perf_counter()
+
+    with spinner(message):
+        yield
+
+    elapsed = perf_counter() - start
+    print(f"[✓] {message} ({elapsed:.2f}s)", flush=True)
 
 def prepare(df):
+    log_step("Applying indicators...")
+
     for module in indicator_modules:
+        log_step(f"Indicator: {module.__name__}")
         df = module.apply(df)
 
+    log_step("Applying patterns...")
+
     for module in pattern_modules:
+        log_step(f"Pattern: {module.__name__}")
         df = module.apply(df)
 
     return df
@@ -94,25 +147,48 @@ def _parse_scalar(value):
 def _parse_condition(condition):
     condition = condition.strip()
 
-    for operator in (">=", "<=", "==", "!=", ">", "<"):
+    for operator in (">=", "<=", "==", "!=", ">", "<", "="):
         if operator in condition:
             column, raw = condition.split(operator, 1)
-            value = _parse_scalar(raw)
+            value = _parse_scalar(raw.strip())
 
             column = column.strip()
 
-            if operator == ">=":
-                return column, lambda s, v=value: s >= v
-            if operator == "<=":
-                return column, lambda s, v=value: s <= v
-            if operator == "==":
-                return column, lambda s, v=value: s == v
-            if operator == "!=":
-                return column, lambda s, v=value: s != v
-            if operator == ">":
-                return column, lambda s, v=value: s > v
-            if operator == "<":
-                return column, lambda s, v=value: s < v
+            def make_predicate(col, op, val, is_column):
+                if is_column:
+                    if op in ("==", "="):
+                        return lambda df, c: df[c] == df[val]
+                    if op == "!=":
+                        return lambda df, c: df[c] != df[val]
+                    if op == ">=":
+                        return lambda df, c: df[c] >= df[val]
+                    if op == "<=":
+                        return lambda df, c: df[c] <= df[val]
+                    if op == ">":
+                        return lambda df, c: df[c] > df[val]
+                    if op == "<":
+                        return lambda df, c: df[c] < df[val]
+
+                else:
+                    if op in ("==", "="):
+                        return lambda df, c, v=val: df[c] == v
+                    if op == "!=":
+                        return lambda df, c, v=val: df[c] != v
+                    if op == ">=":
+                        return lambda df, c, v=val: df[c] >= v
+                    if op == "<=":
+                        return lambda df, c, v=val: df[c] <= v
+                    if op == ">":
+                        return lambda df, c, v=val: df[c] > v
+                    if op == "<":
+                        return lambda df, c, v=val: df[c] < v
+
+                raise ValueError(f"Unsupported operator: {op}")
+
+            is_column_ref = isinstance(value, str)
+            predicate = make_predicate(column, operator, value, is_column_ref)
+
+            return column, predicate
 
     raise ValueError(f"Unsupported condition: {condition}")
 
@@ -125,7 +201,9 @@ def _build_pattern_mask(df, pattern_spec):
 
     for condition in pattern_spec.split(","):
         column, predicate = _parse_condition(condition)
-        mask &= predicate(df[column])
+        # Handle both scalar and column-to-column comparisons
+        result = predicate(df, column) # Object of type "None" cannot be called
+        mask &= result
 
     return mask.fillna(False)
 
@@ -175,44 +253,84 @@ def _pattern_summary(df, pattern_spec):
     return result
 
 
-def run_analysis(save_csv=False, csv_name="XAU_USD_single_timeframe.csv", timeframe="M1", pattern_spec=None):
-    df = load_tf(timeframe, limit=None)
-    df = prepare(df)
+def run_analysis(
+    save_csv=False,
+    csv_name="XAU_USD_single_timeframe.csv",
+    timeframe="M1",
+    pattern_spec=None,
+):
+    log_step(f"Starting analysis for timeframe: {timeframe}")
+
+    # Load data
+    with timed_spinner("Loading timeframe data"):
+        df = load_tf(timeframe, limit=None)
+
+    # Prepare indicators + patterns
+    with timed_spinner("Preparing indicators and patterns"):
+        df = prepare(df)
+
     _cleanup()
 
-    merged = df.copy()
-    merged["TF_BULL_STACK"] = float("nan")
-    merged["TF_BEAR_STACK"] = float("nan")
+    # Merge / copy
+    with timed_spinner("Building merged dataframe"):
+        merged = df.copy()
+        merged["TF_BULL_STACK"] = float("nan")
+        merged["TF_BEAR_STACK"] = float("nan")
 
-    X = window_builder.build(merged)
-    X = X.dropna()
+    # Window builder
+    with timed_spinner("Building windows"):
+        X = window_builder.build(merged)
 
-    valid_rows = merged.index[20:][X.index]
+    with timed_spinner("Dropping NaN rows"):
+        X = X.dropna()
 
-    model, labels = cluster_model.fit(X)
-    similar = similarity_search.search(X)
+    with timed_spinner("Resolving valid rows"):
+        valid_rows = merged.index[20:][X.index]
 
-    correlations = correlation.analyze(merged)
+    # Cluster model
+    with timed_spinner("Running clustering model"):
+        model, labels = cluster_model.fit(X)
 
-    similar_rows = merged.loc[
-        valid_rows[similar],
-        [
-            "UTC",
-            "Close",
-            "COMPRESSION",
-            "VOL_REGIME",
-            "TF_BULL_STACK",
-            "TF_BEAR_STACK",
-        ],
-    ].copy()
+    # Similarity search
+    with timed_spinner("Running similarity search"):
+        similar = similarity_search.search(X)
 
-    pattern_summary = _pattern_summary(merged, pattern_spec) if pattern_spec else None
+    # Correlation
+    with timed_spinner("Analyzing correlations"):
+        correlations = correlation.analyze(merged)
 
-    del X
-    _cleanup()
+    # Similar rows extraction
+    with timed_spinner("Building similar rows output"):
+        similar_rows = merged.loc[
+            valid_rows[similar],
+            [
+                "UTC",
+                "Close",
+                "COMPRESSION",
+                "VOL_REGIME",
+                "TF_BULL_STACK",
+                "TF_BEAR_STACK",
+            ],
+        ].copy()
 
+    # Pattern summary
+    if pattern_spec:
+        with timed_spinner("Running pattern summary"):
+            pattern_summary = _pattern_summary(merged, pattern_spec)
+    else:
+        pattern_summary = None
+
+    # Cleanup
+    with timed_spinner("Cleaning memory"):
+        del X
+        _cleanup()
+
+    # Save CSV
     if save_csv:
-        merged.to_csv(csv_name, index=False)
+        with timed_spinner(f"Saving CSV -> {csv_name}"):
+            merged.to_csv(csv_name, index=False)
+
+    log_step("Analysis complete")
 
     return {
         "data": {timeframe: merged},
@@ -225,8 +343,7 @@ def run_analysis(save_csv=False, csv_name="XAU_USD_single_timeframe.csv", timefr
         "correlations": correlations,
         "pattern_summary": pattern_summary,
     }
-
-
+    
 def main():
     parser = argparse.ArgumentParser(description="Run alphaHunter analysis for a single timeframe")
     parser.add_argument(
