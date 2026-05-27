@@ -18,7 +18,9 @@ from indicators import (
     momentum,
     pivot_points,
     rsi,
+    squeeze,
     stochastic,
+    swing_levels,
     trend_ma,
     volatility,
     volume,
@@ -52,6 +54,8 @@ indicator_modules = [
     fibonacci,
     pivot_points,
     advanced,
+    squeeze,
+    swing_levels,
 ]
 
 pattern_modules = [
@@ -144,6 +148,85 @@ def _parse_scalar(value):
         return raw
 
 
+def _get_column_aliases():
+    """Return a mapping of common alias names to actual column patterns."""
+    return {
+        # MACD aliases
+        "MACD": "MACD_12_26",
+        "MACD_SIGNAL": "MACD_SIGNAL_9",
+        "MACD_HIST": "MACD_HIST_12_26_9",
+        
+        # Stochastic aliases
+        "STOCH_K": "STO_K_14",
+        "STOCH_D": "STO_D_14",
+        "STO_K": "STO_K_14",
+        "STO_D": "STO_D_14",
+        "K": "STO_K_14",
+        "D": "STO_D_14",
+        
+        # Momentum aliases
+        "MOMENTUM": "MOM_10",
+        "MOM": "MOM_10",
+        "ROC": "ROC_10",
+        
+        # Fibonacci aliases
+        "FIB_236": "FIB_0.236",
+        "FIB_382": "FIB_0.382",
+        "FIB_5": "FIB_0.5",
+        "FIB_618": "FIB_0.618",
+        "FIB_786": "FIB_0.786",
+        
+        # RSI aliases
+        "RSI": "RSI_14",
+        
+        # ADX aliases
+        "ADX": "ADX_14",
+        "DI_PLUS": "DI_PLUS_14",
+        "DI_MINUS": "DI_MINUS_14",
+        
+        # ATR aliases
+        "ATR": "ATR_14",
+        
+        # CCI aliases
+        "CCI": "CCI_14",
+        
+        # Volume aliases
+        "VOLUME_SPIKE": "VOL_SMA20",
+        "VOL_SPIKE": "VOL_SMA20",
+        
+        # Squeeze aliases
+        "SQUEEZE_ON": "SQUEEZE",
+        
+        # Market Structure aliases (Break of Structure)
+        "BOS_BULL": "HH",
+        "BOS_BEAR": "LL",
+        "HH_BULL": "HH",
+        "LL_BEAR": "LL",
+    }
+
+
+def _resolve_column_name(column, df):
+    """Resolve column name using aliases or exact match."""
+    # First try exact match
+    if column in df.columns:
+        return column
+    
+    # Try aliases
+    aliases = _get_column_aliases()
+    if column in aliases:
+        resolved = aliases[column]
+        if resolved in df.columns:
+            return resolved
+    
+    # If not found, provide helpful error
+    available = sorted([col for col in df.columns if not col.startswith('_')])
+    raise KeyError(
+        f"Column '{column}' not found.\n"
+        f"Available columns: {', '.join(available[:20])}"
+        f"{'...' if len(available) > 20 else ''}"
+    )
+
+
 def _parse_condition(condition):
     condition = condition.strip()
 
@@ -157,31 +240,31 @@ def _parse_condition(condition):
             def make_predicate(col, op, val, is_column):
                 if is_column:
                     if op in ("==", "="):
-                        return lambda df, c: df[c] == df[val]
+                        return lambda df, c: df[_resolve_column_name(c, df)] == df[_resolve_column_name(val, df)]
                     if op == "!=":
-                        return lambda df, c: df[c] != df[val]
+                        return lambda df, c: df[_resolve_column_name(c, df)] != df[_resolve_column_name(val, df)]
                     if op == ">=":
-                        return lambda df, c: df[c] >= df[val]
+                        return lambda df, c: df[_resolve_column_name(c, df)] >= df[_resolve_column_name(val, df)]
                     if op == "<=":
-                        return lambda df, c: df[c] <= df[val]
+                        return lambda df, c: df[_resolve_column_name(c, df)] <= df[_resolve_column_name(val, df)]
                     if op == ">":
-                        return lambda df, c: df[c] > df[val]
+                        return lambda df, c: df[_resolve_column_name(c, df)] > df[_resolve_column_name(val, df)]
                     if op == "<":
-                        return lambda df, c: df[c] < df[val]
+                        return lambda df, c: df[_resolve_column_name(c, df)] < df[_resolve_column_name(val, df)]
 
                 else:
                     if op in ("==", "="):
-                        return lambda df, c, v=val: df[c] == v
+                        return lambda df, c, v=val: df[_resolve_column_name(c, df)] == v
                     if op == "!=":
-                        return lambda df, c, v=val: df[c] != v
+                        return lambda df, c, v=val: df[_resolve_column_name(c, df)] != v
                     if op == ">=":
-                        return lambda df, c, v=val: df[c] >= v
+                        return lambda df, c, v=val: df[_resolve_column_name(c, df)] >= v
                     if op == "<=":
-                        return lambda df, c, v=val: df[c] <= v
+                        return lambda df, c, v=val: df[_resolve_column_name(c, df)] <= v
                     if op == ">":
-                        return lambda df, c, v=val: df[c] > v
+                        return lambda df, c, v=val: df[_resolve_column_name(c, df)] > v
                     if op == "<":
-                        return lambda df, c, v=val: df[c] < v
+                        return lambda df, c, v=val: df[_resolve_column_name(c, df)] < v
 
                 raise ValueError(f"Unsupported operator: {op}")
 
@@ -201,9 +284,16 @@ def _build_pattern_mask(df, pattern_spec):
 
     for condition in pattern_spec.split(","):
         column, predicate = _parse_condition(condition)
-        # Handle both scalar and column-to-column comparisons
-        result = predicate(df, column) # Object of type "None" cannot be called
-        mask &= result
+        try:
+            # Handle both scalar and column-to-column comparisons
+            result = predicate(df, column)
+            mask &= result
+        except KeyError as e:
+            raise KeyError(
+                f"Pattern condition failed: {condition}\n"
+                f"Error: {str(e)}\n"
+                f"Try using aliases like MACD, STOCH_K, RSI, ADX, MOMENTUM, etc."
+            )
 
     return mask.fillna(False)
 

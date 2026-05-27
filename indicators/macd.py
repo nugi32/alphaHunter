@@ -1,4 +1,8 @@
 def apply(df):
+    """
+    Calculate MACD (Moving Average Convergence Divergence) with histogram.
+    Histogram is MACD line - Signal line and is crucial for divergences.
+    """
     combos = [
         (12, 26, 9),
         (5, 35, 5),
@@ -17,14 +21,11 @@ def apply(df):
         ).mean()
 
         macd = ema_fast - ema_slow
+        signal_line = macd.ewm(span=signal, adjust=False).mean()
+        histogram = macd - signal_line
 
         df[f"MACD_{fast}_{slow}"] = macd
-
-        df[f"MACD_SIGNAL_{signal}"] = (
-            macd.ewm(
-                span=signal,
-                adjust=False,
-            ).mean()
-        )
+        df[f"MACD_SIGNAL_{signal}"] = signal_line
+        df[f"MACD_HIST_{fast}_{slow}_{signal}"] = histogram
 
     return df
