@@ -31,6 +31,7 @@ from patterns import (
     cluster_model,
     compression,
     market_structure,
+    pattern_discovery,
     similarity_search,
     volatility_regime,
     window_builder,
@@ -301,43 +302,119 @@ def _build_pattern_mask(df, pattern_spec):
 def _pattern_summary(df, pattern_spec):
     mask = _build_pattern_mask(df, pattern_spec)
     hits = df.loc[mask].copy()
-    price_move = hits["Close"] - hits["Open"]
+    price_move = (hits["Close"] - hits["Open"]) / hits["Open"] * 100
 
     if hits.empty:
         return {
             "pattern": pattern_spec,
             "count": 0,
+            "coverage_pct": 0,
+            "first_occurrence": None,
+            "last_occurrence": None,
+            "occurrences_per_week": None,
+            "occurrences_per_month": None,
             "price_move_mean": None,
             "price_move_median": None,
             "price_move_min": None,
             "price_move_max": None,
+            "price_move_std": None,
+            "price_move_var": None,
+            "p10": None,
+            "p25": None,
+            "p50": None,
+            "p75": None,
+            "p90": None,
+            "skewness": None,
+            "kurtosis": None,
             "bull_count": 0,
             "bear_count": 0,
             "flat_count": 0,
+            "bullish_percentage": 0,
+            "bearish_percentage": 0,
+            "neutral_percentage": 0,
+            "dominant_direction": None,
+            "directional_confidence": 0,
+            "dominance_ratio": None,
             "sample_rows": hits.head(10),
         }
 
-    # Get all available indicator columns
-    indicator_cols = [col for col in hits.columns if col not in ["UTC", "Open", "High", "Low", "Close", "Volume", "Date", "Time"]]
-    
+    # Convert UTC to datetime if needed for coverage metrics
+    if "UTC" in hits.columns:
+        hits["UTC"] = pd.to_datetime(hits["UTC"], errors="coerce")
+
+    coverage_pct = float(len(hits) / len(df) * 100) if len(df) > 0 else 0
+    first_occurrence = hits["UTC"].min() if "UTC" in hits.columns else None
+    last_occurrence = hits["UTC"].max() if "UTC" in hits.columns else None
+
+    weeks = hits["UTC"].dt.to_period("W").nunique() if "UTC" in hits.columns else 0
+    months = hits["UTC"].dt.to_period("M").nunique() if "UTC" in hits.columns else 0
+    occurrences_per_week = float(len(hits) / weeks) if weeks else None
+    occurrences_per_month = float(len(hits) / months) if months else None
+
+    bull_count = int((price_move > 0).sum())
+    bear_count = int((price_move < 0).sum())
+    flat_count = int((price_move == 0).sum())
+    total = len(price_move)
+    bullish_pct = float(bull_count / total * 100) if total else 0
+    bearish_pct = float(bear_count / total * 100) if total else 0
+    neutral_pct = float(flat_count / total * 100) if total else 0
+    dominant_direction = (
+        "bullish" if bullish_pct >= bearish_pct and bullish_pct >= neutral_pct else
+        "bearish" if bearish_pct >= bullish_pct and bearish_pct >= neutral_pct else
+        "neutral"
+    )
+    dominance_ratio = float(max(bull_count, bear_count, flat_count) / (total - max(bull_count, bear_count, flat_count))) if total - max(bull_count, bear_count, flat_count) > 0 else float("inf")
+
     result = {
         "pattern": pattern_spec,
-        "count": int(mask.sum()),
+        "count": int(total),
+        "coverage_pct": coverage_pct,
+        "first_occurrence": first_occurrence,
+        "last_occurrence": last_occurrence,
+        "occurrences_per_week": occurrences_per_week,
+        "occurrences_per_month": occurrences_per_month,
         "price_move_mean": float(price_move.mean()),
         "price_move_median": float(price_move.median()),
         "price_move_min": float(price_move.min()),
         "price_move_max": float(price_move.max()),
         "price_move_std": float(price_move.std()),
-        "bull_count": int((price_move > 0).sum()),
-        "bear_count": int((price_move < 0).sum()),
-        "flat_count": int((price_move == 0).sum()),
-        "bullish_percentage": float((price_move > 0).sum() / len(price_move) * 100) if len(price_move) > 0 else 0,
-        "bearish_percentage": float((price_move < 0).sum() / len(price_move) * 100) if len(price_move) > 0 else 0,
+        "price_move_var": float(price_move.var()),
+        "p10": float(price_move.quantile(0.10)),
+        "p25": float(price_move.quantile(0.25)),
+        "p50": float(price_move.quantile(0.50)),
+        "p75": float(price_move.quantile(0.75)),
+        "p90": float(price_move.quantile(0.90)),
+        "skewness": float(price_move.skew()),
+        "kurtosis": float(price_move.kurtosis()),
+        "bull_count": bull_count,
+        "bear_count": bear_count,
+        "flat_count": flat_count,
+        "bullish_percentage": bullish_pct,
+        "bearish_percentage": bearish_pct,
+        "neutral_percentage": neutral_pct,
+        "dominant_direction": dominant_direction,
+        "directional_confidence": float(max(bullish_pct, bearish_pct, neutral_pct)),
+        "dominance_ratio": dominance_ratio,
     }
     
-    # Add detailed sample rows with indicator values
+    # Add ATR-normalized move if available
+    if "ATR_14" in hits.columns:
+        atr_norm = (price_move / hits["ATR_14"]).replace([np.inf, -np.inf], np.nan).dropna()
+        if len(atr_norm) > 0:
+            result["atr_normalized_mean"] = float(atr_norm.mean())
+            result["atr_normalized_std"] = float(atr_norm.std())
+        else:
+            result["atr_normalized_mean"] = None
+            result["atr_normalized_std"] = None
+    else:
+        result["atr_normalized_mean"] = None
+        result["atr_normalized_std"] = None
+
+    # Get all available indicator columns
+    indicator_cols = [col for col in hits.columns if col not in ["UTC", "Open", "High", "Low", "Close", "Volume", "Date", "Time"]]
+    
     sample_rows = hits[["UTC", "Open", "Close", "High", "Low", "Volume"] + indicator_cols].head(10).copy()
-    sample_rows["PriceMove"] = sample_rows["Close"] - sample_rows["Open"]
+    sample_rows["PriceMovePct"] = (sample_rows["Close"] - sample_rows["Open"]) / sample_rows["Open"] * 100
     result["sample_rows"] = sample_rows
     
     return result
@@ -403,7 +480,17 @@ def run_analysis(
             ],
         ].copy()
 
-    # Pattern summary
+    # Pattern discovery - automatic pattern identification
+    with timed_spinner("Discovering indicator patterns"):
+        discoverer = pattern_discovery.PatternDiscovery(
+            merged,
+            min_frequency=max(5, len(merged) // 500),  # More relaxed: 0.2% of data
+            min_directional_confidence=55  # Require a stable dominant reaction direction
+        )
+        discovered_patterns = discoverer.discover(max_patterns=15)
+        pattern_discovery_results = discoverer.generate_report_data(top_n=10)
+    
+    # Pattern summary (user-specified pattern)
     if pattern_spec:
         with timed_spinner("Running pattern summary"):
             pattern_summary = _pattern_summary(merged, pattern_spec)
@@ -432,6 +519,7 @@ def run_analysis(
         "tf_similarity_indices": None,
         "correlations": correlations,
         "pattern_summary": pattern_summary,
+        "pattern_discovery_results": pattern_discovery_results,
     }
     
 def main():
@@ -461,16 +549,38 @@ def main():
         print(f"Pattern Condition: {summary['pattern']}")
         print(f"\n--- OCCURRENCE STATISTICS ---")
         print(f"Total Occurrences: {summary['count']}")
+        print(f"Dataset Coverage: {summary['coverage_pct']:.2f}%")
+        if summary['first_occurrence'] is not None:
+            print(f"First Occurrence: {summary['first_occurrence']}")
+            print(f"Last Occurrence: {summary['last_occurrence']}")
+        if summary['occurrences_per_week'] is not None:
+            print(f"Occurrences per week: {summary['occurrences_per_week']:.2f}")
+        if summary['occurrences_per_month'] is not None:
+            print(f"Occurrences per month: {summary['occurrences_per_month']:.2f}")
         if summary['count'] > 0:
-            print(f"Bullish (Close > Open): {summary['bull_count']} ({summary['bullish_percentage']:.2f}%)")
-            print(f"Bearish (Close < Open): {summary['bear_count']} ({summary['bearish_percentage']:.2f}%)")
-            print(f"Flat (Close = Open): {summary['flat_count']}")
-            print(f"\n--- PRICE MOVEMENT ANALYSIS ---")
-            print(f"Average Price Move: {summary['price_move_mean']:.6f}")
-            print(f"Median Price Move: {summary['price_move_median']:.6f}")
-            print(f"Std Dev Price Move: {summary['price_move_std']:.6f}")
-            print(f"Min Price Move: {summary['price_move_min']:.6f}")
-            print(f"Max Price Move: {summary['price_move_max']:.6f}")
+            print(f"Bullish: {summary['bull_count']} ({summary['bullish_percentage']:.2f}%)")
+            print(f"Bearish: {summary['bear_count']} ({summary['bearish_percentage']:.2f}%)")
+            print(f"Neutral: {summary['flat_count']} ({summary['neutral_percentage']:.2f}%)")
+            print(f"Dominant direction: {summary['dominant_direction']}")
+            print(f"Directional confidence: {summary['directional_confidence']:.2f}%")
+            print(f"Dominance ratio: {summary['dominance_ratio']:.2f}")
+            print(f"\n--- MAGNITUDE CONSISTENCY ---")
+            print(f"Average price move: {summary['price_move_mean']:.6f}%")
+            print(f"Median price move: {summary['price_move_median']:.6f}%")
+            print(f"Std dev price move: {summary['price_move_std']:.6f}")
+            print(f"Variance: {summary['price_move_var']:.6f}")
+            print(f"Min price move: {summary['price_move_min']:.6f}%")
+            print(f"Max price move: {summary['price_move_max']:.6f}%")
+            print(f"P10: {summary['p10']:.6f}%")
+            print(f"P25: {summary['p25']:.6f}%")
+            print(f"P50: {summary['p50']:.6f}%")
+            print(f"P75: {summary['p75']:.6f}%")
+            print(f"P90: {summary['p90']:.6f}%")
+            print(f"Skewness: {summary['skewness']:.6f}")
+            print(f"Kurtosis: {summary['kurtosis']:.6f}")
+            if summary.get('atr_normalized_mean') is not None:
+                print(f"ATR-normalized mean move: {summary['atr_normalized_mean']:.6f}")
+                print(f"ATR-normalized std dev: {summary['atr_normalized_std']:.6f}")
             print(f"\n--- DETAILED SAMPLE OCCURRENCES (showing up to 10 examples) ---")
             print(summary["sample_rows"].to_string())
         else:

@@ -1,0 +1,66 @@
+# Example patterns for alphaHunter analysis
+# Use with: python main.py --patterns patterns.txt
+
+# Simple single indicators
+EMA_20>EMA_50
+MACD>MACD_SIGNAL
+RSI_14>70
+RSI_14<30
+ADX_14>=20
+
+# Bollinger Bands
+Close>BB_UPPER
+Close<BB_LOWER
+
+# Momentum
+MOMENTUM>0
+CCI>100
+
+# Volume
+VOLUME_SPIKE=1
+VOL_REGIME=1
+
+# Ichimoku
+TENKAN>KIJUN
+Close>CLOUD_TOP
+
+# Fibonacci
+Close>FIB_618
+
+# Pivot Points
+Close>PIVOT
+
+# Squeeze
+SQUEEZE_ON=true
+
+# Swing Levels
+Close>SWING_HIGH
+
+# Candle Patterns
+DOJI=1
+COMPRESSION=1
+
+# Break of Structure
+BOS_BULL=1
+
+# Combined patterns - Trend confirmation
+EMA_20>EMA_50,MACD>MACD_SIGNAL
+EMA_20>EMA_50,RSI_14>50
+MACD>MACD_SIGNAL,RSI_14>50
+
+# Combined patterns - Breakout
+Close>BB_UPPER,ADX_14>=20
+COMPRESSION=1,VOL_REGIME=1
+
+# Combined patterns - Oversold bounce
+RSI_14<30,STOCH_K<20
+Close<BB_LOWER,RSI_14<30
+
+# Combined patterns - Support/Resistance
+Close>PIVOT,MACD>MACD_SIGNAL
+Close>FIB_618,RSI_14>50
+
+# Complex patterns
+SQUEEZE_ON=true,COMPRESSION=1,VOL_REGIME=1
+TENKAN>KIJUN,Close>CLOUD_TOP,RSI_14>50
+BOS_BULL=1,MACD>MACD_SIGNAL,ADX_14>=20
