@@ -2,92 +2,65 @@ import json
 from pathlib import Path
 import pandas as pd
 
-from analysis import build_search_space, combo_stats, scan_all_combos
+from analysis import (
+    build_search_space, combo_stats, scan_all_combos,
+    measure_reactions,
+    run_consistency_filter,
+    validate_overfit,
+    rank_candidates,
+    generate_report,
+)
 from timing_utils import timed_spinner
+from analysis.consistency import diagnose_thresholds
 
-
-def run_search(
+def run_pipeline(
     enriched_csv: str = "payload_H1.csv",
     payload_path: str = "payload.json",
+    output_dir:   str = "results",
 ):
-    # ── Load data ─────────────────────────────────────────
-    with timed_spinner(f"Loading enriched data: {enriched_csv}"):
-        df = pd.read_csv(enriched_csv, parse_dates=["UTC"])
-        df = df.sort_values("UTC").reset_index(drop=True)
-
-    # ── Load payload ──────────────────────────────────────
+    df      = pd.read_csv(enriched_csv, parse_dates=["UTC"])
+    df      = df.sort_values("UTC").reset_index(drop=True)
     payload = json.loads(Path(payload_path).read_text())
 
-    # ── Build search space ────────────────────────────────
+    # ── Step 4+5 ──────────────────────────────────────────
     with timed_spinner("Building search space"):
         combos = build_search_space(payload)
-
     stats = combo_stats(combos)
+    print(f"  Combinations: {stats['total']:,}  |  by depth: {stats['by_depth']}")
 
-    print(f"  Total combinations : {stats['total']:,}")
-    print(f"  By depth           : {stats['by_depth']}")
-
-    # ── Scan ──────────────────────────────────────────────
-    print(
-        f"\nScanning {stats['total']:,} combinations "
-        f"against {len(df):,} candles …"
-    )
-
+    print(f"\nStep 5 — Scanning {stats['total']:,} combos …")
     matches = scan_all_combos(df, combos, payload)
+    print(f"  Candidates after min_samples: {len(matches):,}\n")
 
-    print(
-        f"  Passed min_samples="
-        f"{payload.get('min_samples', 30)}: "
-        f"{len(matches):,} candidates\n"
-    )
+    # ── Step 6 ────────────────────────────────────────────
+    print("Step 6 — Measuring price reactions …")
+    enriched = measure_reactions(df, matches, payload)
+    print(f"  Enriched: {len(enriched):,}\n")
+    
+    diagnose_thresholds(enriched)
+    with timed_spinner("Step 7+8 — Consistency + frequency filter"):
+        consistent = run_consistency_filter(enriched, payload, total_candles=len(df))
+    print(f"  Passed consistency: {len(consistent):,}\n")
 
-    if not matches:
-        print("No matches found.")
-        return df, payload, matches
+    # ── Step 7+8 ──────────────────────────────────────────
+    with timed_spinner("Step 7+8 — Consistency + frequency filter"):
+        consistent = run_consistency_filter(enriched, payload, total_candles=len(df))
+    print(f"  Passed consistency: {len(consistent):,}\n")
 
-    # detect key otomatis
-    first = matches[0]
+    # ── Step 9 ────────────────────────────────────────────
+    print("Step 9 — Overfit validation …")
+    validated = validate_overfit(consistent, df, payload)
+    print(f"  Stable candidates: {len(validated):,}\n")
 
-    count_key = next(
-        k for k in first.keys()
-        if "count" in str(k).lower()
-    )
+    # ── Step 10 ───────────────────────────────────────────
+    with timed_spinner("Step 10 — Ranking"):
+        ranked = rank_candidates(validated, payload)
 
-    combo_key = next(
-        k for k in first.keys()
-        if k != count_key
-    )
+    # ── Step 11 ───────────────────────────────────────────
+    generate_report(ranked, payload, output_dir=output_dir)
 
-    # sort descending
-    sorted_matches = sorted(
-        matches,
-        key=lambda x: x[count_key],
-        reverse=True,
-    )
-
-    # ── Top 10 terminal ───────────────────────────────────
-    print("Top 10 by match count:")
-
-    for item in sorted_matches[:10]:
-        print(
-            f"  {item[count_key]:>6} hits | "
-            f"{item[combo_key]}"
-        )
-
-    # ── Save ALL results ──────────────────────────────────
-    pd.DataFrame(sorted_matches).to_csv(
-        "all_matches.csv",
-        index=False,
-        encoding="utf-8",
-    )
-
-    print(
-        f"\n✓ Saved all {len(sorted_matches):,} matches "
-        f"to all_matches.csv"
-    )
-
-    return df, payload, sorted_matches
+    return ranked
 
 
 if __name__ == "__main__":
-    df, payload, matches = run_search()
+    run_pipeline()
