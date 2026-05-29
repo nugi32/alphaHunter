@@ -9,15 +9,19 @@ def measure_reactions(
     atr_col: str = "ATR_14",
     neutral_threshold: float = 0.2,
     verbose: bool = True,
+    include_reactions: bool = False,
 ) -> list[dict]:
     """
     Vectorised reaction measurement.
 
     Direction = NET close after lookahead candles.
     Magnitude = max excursion during window.
+
+    Detailed per-entry reactions are omitted by default to avoid large
+    intermediate allocations in high-frequency runs.
     """
 
-    lookahead = payload.get("lookahead", 5)
+    lookahead = payload.get("lookahead", 5)    
     n_df = len(df)
     total = len(matches)
 
@@ -274,86 +278,86 @@ def measure_reactions(
             mag_pct
         )
 
-        enriched.append(
-            {
-                **{
-                    k: v
-                    for k, v
-                    in match.items()
-                    if k != "match_index"
-                },
-                "match_index": list(
-                    positions
+        enriched_record = {
+            **{
+                k: v
+                for k, v
+                in match.items()
+                if k != "match_index"
+            },
+            "match_index": positions,
+            "valid_count": n,
+            "bull_pct": round(
+                bull_pct,
+                2,
+            ),
+            "bear_pct": round(
+                bear_pct,
+                2,
+            ),
+            "neutral_pct": round(
+                neutral_pct,
+                2,
+            ),
+            "dominant_dir": dominant,
+            "mag_atr_mean": mag_mean,
+            "mag_atr_std": mag_std,
+            "mag_atr_median": mag_med,
+            "mag_pct_mean": pct_mean,
+            "timing_mean": round(
+                float(
+                    np.mean(
+                        timing
+                    )
                 ),
-                "valid_count": n,
-                "bull_pct": round(
-                    bull_pct,
-                    2,
+                2,
+            ),
+            "persistence_mean": round(
+                float(
+                    np.mean(
+                        persistence
+                    )
                 ),
-                "bear_pct": round(
-                    bear_pct,
-                    2,
-                ),
-                "neutral_pct": round(
-                    neutral_pct,
-                    2,
-                ),
-                "dominant_dir": dominant,
-                "mag_atr_mean": mag_mean,
-                "mag_atr_std": mag_std,
-                "mag_atr_median": mag_med,
-                "mag_pct_mean": pct_mean,
-                "timing_mean": round(
-                    float(
-                        np.mean(
-                            timing
-                        )
+                2,
+            ),
+        }
+
+        if include_reactions:
+            enriched_record["reactions"] = [
+                {
+                    "pos": int(
+                        positions[i]
                     ),
-                    2,
-                ),
-                "persistence_mean": round(
-                    float(
-                        np.mean(
-                            persistence
-                        )
+                    "direction": str(
+                        directions[i]
                     ),
-                    2,
-                ),
-                "reactions": [
-                    {
-                        "pos": int(
-                            positions[i]
-                        ),
-                        "direction": str(
-                            directions[i]
-                        ),
-                        "mag_atr":
-                            float(
-                                mag_atr[i]
-                            )
-                            if not np.isnan(
-                                mag_atr[i]
-                            )
-                            else None,
-                        "mag_pct":
-                            float(
-                                mag_pct[i]
-                            )
-                            if not np.isnan(
-                                mag_pct[i]
-                            )
-                            else None,
-                        "timing": int(
-                            timing[i]
-                        ),
-                        "persistence": int(
-                            persistence[i]
-                        ),
-                    }
-                    for i in range(n)
-                ],
-            }
-        )
+                    "mag_atr":
+                        float(
+                            mag_atr[i]
+                        )
+                        if not np.isnan(
+                            mag_atr[i]
+                        )
+                        else None,
+                    "mag_pct":
+                        float(
+                            mag_pct[i]
+                        )
+                        if not np.isnan(
+                            mag_pct[i]
+                        )
+                        else None,
+                    "timing": int(
+                        timing[i]
+                    ),
+                    "persistence": int(
+                        persistence[i]
+                    ),
+                }
+                for i in range(n)
+            ]
+
+        enriched.append(enriched_record)
 
     if verbose:
         print()

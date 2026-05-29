@@ -30,9 +30,9 @@
     { "name": "CCI14_overbought", "type": "threshold", "col": "CCI_14", "op": ">", "val": 100 }
   ],
 
-  "max_depth": 4,
+  "max_depth": 5,
   "min_samples": 50,
-  "lookahead": 1,
+  "lookahead": 5,
   "validation_split": 0.2,
 
   "min_direction_pct": 55.0,
