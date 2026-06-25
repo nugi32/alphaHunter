@@ -9,7 +9,7 @@ import sys
 import pandas as pd
 from pathlib import Path
 from analysis import run_analysis
-from report.report_generator import generate_report
+from old.report.report_generator import generate_report
 
 TIMEFRAMES = ["M1", "M5", "M15", "H1", "H4", "D1", "W1", "MN1"]
 

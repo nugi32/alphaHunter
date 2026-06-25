@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>H1 | all</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            margin:40px;
+        }
+
+        h1{
+            border-bottom:2px solid #ddd;
+        }
+
+        .card{
+            border:1px solid #ddd;
+            padding:15px;
+            margin-bottom:20px;
+            border-radius:8px;
+        }
+
+        img{
+            width:100%;
+            margin-top:10px;
+        }
+
+        table{
+            border-collapse:collapse;
+            width:100%;
+        }
+
+        th,td{
+            border:1px solid #ddd;
+            padding:8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>H1 | all</h1>
+
+<div class="card">
+
+<h2>Summary</h2>
+
+<ul>
+<li>Total candles analyzed: 117735</li>
+<li>Bullish reactions: 58185</li>
+<li>Bearish reactions: 56955</li>
+<li>Neutral reactions: 2595</li>
+<li>Average move: 0.0006%</li>
+<li>Median move: 0.0%</li>
+<li>Move dispersion (std): 0.2218%</li>
+<li>Move variance: 0.0492%</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h2>Distribution</h2>
+
+<img src="H1_all_histogram.png">
+
+</div>
+
+<div class="card">
+
+<h2>RSI vs PriceMove</h2>
+
+<img src="H1_all_scatter.png">
+
+</div>
+
+
+
+<div class="card">
+
+<h2>Sample Data</h2>
+
+<table border="1" class="dataframe table table-sm">
+  <thead>
+    <tr style="text-align: right;">
+      <th>UTC</th>
+      <th>Open</th>
+      <th>High</th>
+      <th>Low</th>
+      <th>Close</th>
+      <th>Volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2004-06-11 05:00:00</td>
+      <td>384.0</td>
+      <td>384.3</td>
+      <td>383.3</td>
+      <td>383.8</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 06:00:00</td>
+      <td>383.8</td>
+      <td>384.3</td>
+      <td>383.1</td>
+      <td>383.1</td>
+      <td>41</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 07:00:00</td>
+      <td>383.1</td>
+      <td>384.1</td>
+      <td>382.8</td>
+      <td>383.1</td>
+      <td>55</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 08:00:00</td>
+      <td>383.0</td>
+      <td>383.8</td>
+      <td>383.0</td>
+      <td>383.6</td>
+      <td>33</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 09:00:00</td>
+      <td>383.6</td>
+      <td>383.8</td>
+      <td>383.5</td>
+      <td>383.6</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 10:00:00</td>
+      <td>383.5</td>
+      <td>384.1</td>
+      <td>383.3</td>
+      <td>383.3</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 11:00:00</td>
+      <td>383.6</td>
+      <td>384.3</td>
+      <td>383.6</td>
+      <td>384.0</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 12:00:00</td>
+      <td>383.8</td>
+      <td>383.8</td>
+      <td>383.8</td>
+      <td>383.8</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 13:00:00</td>
+      <td>383.8</td>
+      <td>384.6</td>
+      <td>383.8</td>
+      <td>384.6</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <td>2004-06-11 14:00:00</td>
+      <td>384.3</td>
+      <td>384.8</td>
+      <td>384.1</td>
+      <td>384.3</td>
+      <td>19</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Insight</h2>
+
+<p>Dominant price reaction: bullish (49.4% of candles). Average move: 0.001%. Move dispersion (std): 0.222%. Move sizes show wider dispersion, investigate stability further.</p>
+
+</div>
+
+</body>
+</html>

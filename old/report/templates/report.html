@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            margin:40px;
+        }
+
+        h1{
+            border-bottom:2px solid #ddd;
+        }
+
+        .card{
+            border:1px solid #ddd;
+            padding:15px;
+            margin-bottom:20px;
+            border-radius:8px;
+        }
+
+        img{
+            width:100%;
+            margin-top:10px;
+        }
+
+        table{
+            border-collapse:collapse;
+            width:100%;
+        }
+
+        th,td{
+            border:1px solid #ddd;
+            padding:8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>{{ title }}</h1>
+
+<div class="card">
+
+<h2>Summary</h2>
+
+<ul>
+<li>Total candles analyzed: {{ total }}</li>
+<li>Bullish reactions: {{ bullish }}</li>
+<li>Bearish reactions: {{ bearish }}</li>
+<li>Neutral reactions: {{ neutral }}</li>
+<li>Average move: {{ avg_move }}%</li>
+<li>Median move: {{ median_move }}%</li>
+<li>Move dispersion (std): {{ std_move }}%</li>
+<li>Move variance: {{ var_move }}%</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h2>Distribution</h2>
+
+<img src="{{ hist_chart }}">
+
+</div>
+
+<div class="card">
+
+<h2>RSI vs PriceMove</h2>
+
+<img src="{{ scatter_chart }}">
+
+</div>
+
+{% if pattern_discovery_table %}
+<div class="card">
+{{ pattern_discovery_table | safe }}
+</div>
+{% endif %}
+
+<div class="card">
+
+<h2>Sample Data</h2>
+
+{{ sample_table | safe }}
+
+</div>
+
+<div class="card">
+
+<h2>Insight</h2>
+
+<p>{{ insight }}</p>
+
+</div>
+
+</body>
+</html>

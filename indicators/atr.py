@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-PERIODS = [7, 14, 21]
+PERIODS = [5, 7, 13, 14, 21]
 
 
 def _wilders_moving_average(series, period):

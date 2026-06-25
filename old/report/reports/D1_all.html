@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>D1 | all</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            margin:40px;
+        }
+
+        h1{
+            border-bottom:2px solid #ddd;
+        }
+
+        .card{
+            border:1px solid #ddd;
+            padding:15px;
+            margin-bottom:20px;
+            border-radius:8px;
+        }
+
+        img{
+            width:100%;
+            margin-top:10px;
+        }
+
+        table{
+            border-collapse:collapse;
+            width:100%;
+        }
+
+        th,td{
+            border:1px solid #ddd;
+            padding:8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>D1 | all</h1>
+
+<div class="card">
+
+<h2>Summary</h2>
+
+<ul>
+<li>Total candles analyzed: 5819</li>
+<li>Bullish reactions: 3018</li>
+<li>Bearish reactions: 2763</li>
+<li>Neutral reactions: 38</li>
+<li>Average move: 0.0242%</li>
+<li>Median move: 0.0229%</li>
+<li>Move dispersion (std): 1.0138%</li>
+<li>Move variance: 1.0278%</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+
+<h2>Distribution</h2>
+
+<img src="histogram.png">
+
+</div>
+
+<div class="card">
+
+<h2>RSI vs PriceMove</h2>
+
+<img src="scatter.png">
+
+</div>
+
+
+<div class="card">
+
+        <h2>🎯 Discovered Patterns (Top 10)</h2>
+        <p>These patterns are automatically discovered combinations of indicators that show repeatable directional reaction behavior and clustered move magnitude.</p>
+        <table class="table table-sm table-striped">
+            <thead style="background-color: #f0f0f0;">
+                <tr>
+                    <th>Indicator Combination</th>
+                    <th>Frequency</th>
+                    <th>Dominant Direction</th>
+                    <th>Directional Confidence</th>
+                    <th>Avg Move %</th>
+                    <th>Std Dev</th>
+                    <th>P10</th>
+                    <th>P90</th>
+                    <th>Quality Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            <tr>
+                <td>ADX_14, BREAKOUT_UP, CCI_14, CCI_20, DI_PLUS_14, MACD_12_26, MACD_5_35, MACD_8_21, MACD_HIST_12_26_9, MACD_HIST_5_35_5, MACD_HIST_8_21_9, MACD_SIGNAL_5, MACD_SIGNAL_9, MOM_10, MOM_20, MOM_5, RANGE20, ROC_10, ROC_20, ROC_5, RSI_14, RSI_21, RSI_7, STO_D_14, STO_D_21, STO_K_14, STO_K_21, STO_K_RAW_14, STO_K_RAW_21, VOL30, VOLATILITY_10, VOLATILITY_20, VOLATILITY_50, WILLIAMS_R</td>
+                <td>22</td>
+                <td>bullish</td>
+                <td>95.45%</td>
+                <td>1.3848%</td>
+                <td>0.6883</td>
+                <td>0.6056%</td>
+                <td>2.1056%</td>
+                <td>12.44</td>
+            </tr>
+            
+            <tr>
+                <td>ADX_14, ATR_14, ATR_21, ATR_7, BREAKOUT_UP, CCI_14, CCI_20, DI_PLUS_14, MACD_12_26, MACD_5_35, MACD_8_21, MACD_HIST_12_26_9, MACD_HIST_5_35_5, MACD_HIST_8_21_9, MACD_SIGNAL_5, MACD_SIGNAL_9, MOM_10, MOM_20, MOM_5, RANGE20, ROC_10, ROC_20, ROC_5, RSI_14, RSI_21, RSI_7, STO_D_14, STO_D_21, STO_K_14, STO_K_21, STO_K_RAW_14, STO_K_RAW_21, VOL30, VOLATILITY_10, VOLATILITY_20, VOLATILITY_50, WILLIAMS_R</td>
+                <td>11</td>
+                <td>bullish</td>
+                <td>100.00%</td>
+                <td>1.3781%</td>
+                <td>0.7597</td>
+                <td>0.7274%</td>
+                <td>2.5014%</td>
+                <td>6.25</td>
+            </tr>
+            
+            <tr>
+                <td>BREAKOUT_UP, CCI_14, CCI_20, DI_PLUS_14, MACD_12_26, MACD_5_35, MACD_8_21, MACD_HIST_12_26_9, MACD_HIST_5_35_5, MACD_HIST_8_21_9, MACD_SIGNAL_5, MACD_SIGNAL_9, MOM_10, MOM_20, MOM_5, RANGE20, ROC_10, ROC_20, ROC_5, RSI_14, RSI_21, RSI_7, STO_D_14, STO_D_21, STO_K_14, STO_K_21, STO_K_RAW_14, STO_K_RAW_21, VOL30, VOLATILITY_10, VOLATILITY_20, VOLATILITY_50, WILLIAMS_R</td>
+                <td>11</td>
+                <td>bullish</td>
+                <td>100.00%</td>
+                <td>1.6539%</td>
+                <td>0.8396</td>
+                <td>0.5292%</td>
+                <td>2.6353%</td>
+                <td>5.98</td>
+            </tr>
+            
+            <tr>
+                <td>ADX_14, CCI_14, CCI_20, DI_PLUS_14, MACD_12_26, MACD_5_35, MACD_8_21, MACD_HIST_12_26_9, MACD_HIST_5_35_5, MACD_HIST_8_21_9, MACD_SIGNAL_5, MACD_SIGNAL_9, MOM_10, MOM_20, MOM_5, RANGE20, ROC_10, ROC_20, ROC_5, RSI_14, RSI_21, RSI_7, STO_D_14, STO_D_21, STO_K_14, STO_K_21, STO_K_RAW_14, STO_K_RAW_21, VOL30, VOLATILITY_10, VOLATILITY_20, VOLATILITY_50, WILLIAMS_R</td>
+                <td>17</td>
+                <td>bearish</td>
+                <td>58.82%</td>
+                <td>-0.1312%</td>
+                <td>0.8203</td>
+                <td>-0.9780%</td>
+                <td>0.8585%</td>
+                <td>5.49</td>
+            </tr>
+            
+            <tr>
+                <td>ADX_14, ATR_14, ATR_21, ATR_7, DI_MINUS_14, RANGE20, VOL30, VOLATILITY_10, VOLATILITY_20, VOLATILITY_50</td>
+                <td>11</td>
+                <td>bullish</td>
+                <td>63.64%</td>
+                <td>0.9224%</td>
+                <td>1.5181</td>
+                <td>-0.7690%</td>
+                <td>2.0708%</td>
+                <td>2.78</td>
+            </tr>
+            
+            </tbody>
+        </table>
+        
+</div>
+
+
+<div class="card">
+
+<h2>Sample Data</h2>
+
+<table border="1" class="dataframe table table-sm">
+  <thead>
+    <tr style="text-align: right;">
+      <th>UTC</th>
+      <th>Open</th>
+      <th>High</th>
+      <th>Low</th>
+      <th>Close</th>
+      <th>Volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2004-06-11</td>
+      <td>384.0</td>
+      <td>384.8</td>
+      <td>382.8</td>
+      <td>384.1</td>
+      <td>272</td>
+    </tr>
+    <tr>
+      <td>2004-06-13</td>
+      <td>384.3</td>
+      <td>384.5</td>
+      <td>383.6</td>
+      <td>383.6</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>2004-06-14</td>
+      <td>384.3</td>
+      <td>385.8</td>
+      <td>381.8</td>
+      <td>382.8</td>
+      <td>1901</td>
+    </tr>
+    <tr>
+      <td>2004-06-15</td>
+      <td>383.3</td>
+      <td>388.8</td>
+      <td>381.1</td>
+      <td>387.1</td>
+      <td>1944</td>
+    </tr>
+    <tr>
+      <td>2004-06-16</td>
+      <td>387.6</td>
+      <td>389.8</td>
+      <td>382.6</td>
+      <td>384.6</td>
+      <td>2016</td>
+    </tr>
+    <tr>
+      <td>2004-06-17</td>
+      <td>383.6</td>
+      <td>389.3</td>
+      <td>383.0</td>
+      <td>388.3</td>
+      <td>1580</td>
+    </tr>
+    <tr>
+      <td>2004-06-18</td>
+      <td>388.1</td>
+      <td>395.8</td>
+      <td>385.8</td>
+      <td>394.3</td>
+      <td>2239</td>
+    </tr>
+    <tr>
+      <td>2004-06-20</td>
+      <td>394.3</td>
+      <td>394.8</td>
+      <td>394.1</td>
+      <td>394.6</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <td>2004-06-21</td>
+      <td>394.3</td>
+      <td>396.8</td>
+      <td>392.1</td>
+      <td>393.1</td>
+      <td>1673</td>
+    </tr>
+    <tr>
+      <td>2004-06-22</td>
+      <td>393.1</td>
+      <td>396.3</td>
+      <td>392.3</td>
+      <td>394.0</td>
+      <td>1407</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Insight</h2>
+
+<p>Dominant price reaction: bullish (51.9% of candles). Average move: 0.024%. Move dispersion (std): 1.014%. Move sizes show wider dispersion, investigate stability further.</p>
+
+</div>
+
+</body>
+</html>

@@ -4,7 +4,7 @@ def apply(df):
     Standard: Fast Stochastic uses raw %K
     Slow: Smooths %K first, then applies %D smoothing
     """
-    for p in [14, 21]:
+    for p in [5, 9, 14, 21]:
         low = df["Low"].rolling(p).min()
         high = df["High"].rolling(p).max()
 

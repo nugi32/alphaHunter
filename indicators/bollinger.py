@@ -1,5 +1,5 @@
-PERIODS = [20, 50]
-MULTI = [2, 3]
+PERIODS = [20, 50, 100]
+MULTI = [1.5, 2, 2.5]
 
 
 def apply(df):

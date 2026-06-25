@@ -7,6 +7,8 @@ def apply(df):
         (12, 26, 9),
         (5, 35, 5),
         (8, 21, 9),
+        (9, 21, 9),
+        (12, 34, 9),
     ]
 
     for fast, slow, signal in combos:

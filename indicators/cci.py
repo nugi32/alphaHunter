@@ -10,7 +10,7 @@ def apply(df):
     """
     tp = (df["High"] + df["Low"] + df["Close"]) / 3
 
-    for p in [14, 20]:
+    for p in [9, 14, 20, 21]:
         sma = tp.rolling(p).mean()
         mad = (tp - sma).abs().rolling(p).mean()
 
