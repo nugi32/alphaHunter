@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def apply(df):
     """
     Calculate standard pivot points (S2, S1, PP, R1, R2).
@@ -17,10 +20,12 @@ def apply(df):
     r2 = pivot + (prev_high - prev_low)
     s2 = pivot - (prev_high - prev_low)
 
-    df["PIVOT"] = pivot
-    df["R1"] = r1
-    df["R2"] = r2
-    df["S1"] = s1
-    df["S2"] = s2
+    extra = {
+        "PIVOT": pivot,
+        "R1": r1,
+        "R2": r2,
+        "S1": s1,
+        "S2": s2,
+    }
 
-    return df
+    return pd.concat([df, pd.DataFrame(extra, index=df.index)], axis=1)

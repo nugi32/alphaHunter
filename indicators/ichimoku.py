@@ -21,16 +21,14 @@ def apply(df):
     # Chikou Span: Close shifted back 26 periods (for future reference)
     chikou = df["Close"].shift(-26)
 
-    df["TENKAN"] = tenkan
-    df["KIJUN"] = kijun
-    df["SENKOU_A"] = senkou_a
-    df["SENKOU_B"] = senkou_b
-    df["CHIKOU"] = chikou
+    extra = {
+        "TENKAN": tenkan,
+        "KIJUN": kijun,
+        "SENKOU_A": senkou_a,
+        "SENKOU_B": senkou_b,
+        "CHIKOU": chikou,
+        "CLOUD_TOP": pd.concat([senkou_a, senkou_b], axis=1).max(axis=1),
+        "CLOUD_BOTTOM": pd.concat([senkou_a, senkou_b], axis=1).min(axis=1),
+    }
 
-    # Cloud (Kumo) is the area between Senkou A and B
-    # Upper cloud = max(Senkou A, Senkou B)
-    df["CLOUD_TOP"] = pd.concat([senkou_a, senkou_b], axis=1).max(axis=1)
-    # Lower cloud = min(Senkou A, Senkou B)
-    df["CLOUD_BOTTOM"] = pd.concat([senkou_a, senkou_b], axis=1).min(axis=1)
-
-    return df
+    return pd.concat([df, pd.DataFrame(extra, index=df.index)], axis=1)

@@ -7,27 +7,20 @@ ConditionCombo = tuple[ConditionName, ...]
 
 def build_search_space(payload: dict) -> list[ConditionCombo]:
     """
-    Generate all unique combinations of condition names up to max_depth.
+    Generate unique combinations of condition names up to max_depth.
 
-    Each condition is identified by its "name" field from payload["conditions"].
-    Evaluation logic is handled separately in condition_engine.py.
-
-    Example output:
-        [
-            ("RSI14_oversold",),
-            ("bull_engulf",),
-            ("RSI14_oversold", "bull_engulf"),
-            ("RSI14_oversold", "EMA21_above_EMA50"),
-            ("RSI14_oversold", "bull_engulf", "vol_spike_2x"),
-            ...
-        ]
+    For large payloads, a hard cap can be enforced via payload["max_combinations"]
+    to avoid the combinatorial explosion that makes scanning extremely slow.
     """
-    names     = [c["name"] for c in payload["conditions"]]
+    names = [c["name"] for c in payload["conditions"]]
     max_depth = payload.get("max_depth", 3)
+    max_combinations = payload.get("max_combinations")
 
     space: list[ConditionCombo] = []
     for depth in range(1, max_depth + 1):
         for combo in combinations(names, depth):
+            if max_combinations is not None and len(space) >= max_combinations:
+                return space
             space.append(combo)
 
     return space

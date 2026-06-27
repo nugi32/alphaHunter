@@ -61,7 +61,8 @@
     { "name": "squeeze_active", "type": "threshold", "col": "SQUEEZE", "op": "==", "val": 1 }
   ],
 
-  "max_depth": 5,
+  "max_depth": 3,
+  "max_combinations": 200000,
   "min_samples": 50,
   "lookahead": 5,
   "validation_split": 0.2,

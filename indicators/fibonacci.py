@@ -18,12 +18,13 @@ def apply(df):
     diff = high_100 - low_100
 
     # Calculate retracement levels from swing high
+    extra = {}
     for level in LEVELS:
         # Levels are measured down from recent high
-        df[f"FIB_{level}"] = high_100 - diff * level
+        extra[f"FIB_{level}"] = high_100 - diff * level
 
     # Also provide the swing high and low reference
-    df["FIB_HIGH"] = high_100
-    df["FIB_LOW"] = low_100
+    extra["FIB_HIGH"] = high_100
+    extra["FIB_LOW"] = low_100
 
-    return df
+    return pd.concat([df, pd.DataFrame(extra, index=df.index)], axis=1)
