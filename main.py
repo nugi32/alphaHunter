@@ -1,3 +1,20 @@
+"""Command-line entry point for AlphaHunter.
+
+This module orchestrates the full analysis pipeline:
+
+1. Load market data for a timeframe.
+2. Enrich the candles with technical indicators and patterns.
+3. Build a search space of condition combinations.
+4. Scan the full dataset for matching combinations.
+5. Measure how price reacts after each match.
+6. Filter candidates by statistical consistency and frequency.
+7. Validate stability over multiple time splits.
+8. Rank the surviving candidates and write reports.
+
+The implementation intentionally keeps the execution flow explicit so new
+contributors can follow the business logic end to end.
+"""
+
 import argparse
 import copy
 import json
@@ -27,6 +44,31 @@ def cmd_prepare(
     output_path: Optional[str] = None,
     limit:       Optional[int] = None,
 ) -> str:
+    """Create an enriched CSV payload for a timeframe.
+
+    Purpose:
+        Load raw market data, apply every indicator and pattern module, and
+        persist the enriched candles to disk for later analysis.
+
+    Inputs:
+        timeframe: The requested timeframe key such as M1, H1, or D1.
+        output_path: Optional output filename; defaults to payload_{timeframe}.csv.
+        limit: Optional row limit used to reduce the amount of data loaded.
+
+    Outputs:
+        The path to the generated CSV file.
+
+    Side effects:
+        Writes the enriched dataframe to disk.
+
+    Algorithm:
+        1. Load the raw candles for the timeframe.
+        2. Apply all indicator and pattern modules in sequence.
+        3. Persist the resulting dataframe to CSV.
+
+    Assumptions:
+        The data files referenced by loader.py exist locally.
+    """
     if output_path is None:
         output_path = f"payload_{timeframe}.csv"
 
@@ -49,6 +91,29 @@ def run_pipeline(
     payload:    dict,
     output_dir: str = "results",
 ) -> list[dict]:
+    """Run the full brute-force analysis pipeline for one payload configuration.
+
+    Purpose:
+        Execute the complete search-and-rank workflow from search-space
+        construction to report generation.
+
+    Inputs:
+        df: An enriched dataframe with OHLCV columns and derived indicators.
+        payload: The analysis configuration, including conditions, limits, and
+            lookahead settings.
+        output_dir: Directory where the report artifacts should be written.
+
+    Outputs:
+        A ranked list of candidate condition combinations.
+
+    Side effects:
+        Prints progress information and writes report files to disk.
+
+    Algorithm:
+        The function follows the pipeline described in the project docs:
+        search-space generation -> candidate scanning -> reaction measurement ->
+        consistency filtering -> overfit validation -> ranking -> report generation.
+    """
     lookahead = payload.get("lookahead", 5)
     depth     = payload.get("max_depth", 3)
 
@@ -56,7 +121,8 @@ def run_pipeline(
     print(f"  lookahead={lookahead}  |  max_depth={depth}  |  output → {output_dir}")
     print(f"{'='*60}")
 
-    # ── Step 4+5 ──────────────────────────────────────────
+    # Step 4+5: Generate the condition combinations and scan them against the
+    # dataframe. This is the brute-force engine of the project.
     with timed_spinner("Building search space"):
         combos = build_search_space(payload)
     stats = combo_stats(combos)
@@ -70,14 +136,15 @@ def run_pipeline(
         print("  No matches — skipping remaining steps.\n")
         return []
 
-    # ── Step 6 ────────────────────────────────────────────
+    # Step 6: Measure how price reacts after each candidate condition fires.
     print("Step 6 — Measuring price reactions …")
     enriched = measure_reactions(df, matches, payload)
     print(f"  Enriched: {len(enriched):,}\n")
 
     diagnose_thresholds(enriched)
 
-    # ── Step 7+8 ──────────────────────────────────────────
+    # Steps 7+8: Remove candidates that are too noisy, too rare, or too volatile
+    # in their measured reactions.
     with timed_spinner("Step 7+8 — Consistency + frequency filter"):
         consistent = run_consistency_filter(enriched, payload, total_candles=len(df))
     print(f"  Passed consistency: {len(consistent):,}\n")
@@ -86,7 +153,8 @@ def run_pipeline(
         print("  Nothing passed consistency — skipping validation.\n")
         return []
 
-    # ── Step 9 ────────────────────────────────────────────
+    # Step 9: Check that the winning patterns remain stable across train/val/oos
+    # time splits rather than only fitting one slice of history.
     print("Step 9 — Overfit validation …")
     validated = validate_overfit(consistent, df, payload)
     print(f"  Stable candidates: {len(validated):,}\n")
@@ -95,11 +163,12 @@ def run_pipeline(
         print("  Nothing passed validation.\n")
         return []
 
-    # ── Step 10 ───────────────────────────────────────────
+    # Step 10: Score the survivors by a weighted mix of direction consistency,
+    # magnitude consistency, frequency, sample size, and split stability.
     with timed_spinner("Step 10 — Ranking"):
         ranked = rank_candidates(validated, payload)
 
-    # ── Step 11 ───────────────────────────────────────────
+    # Step 11: Save the final report artifacts to disk.
     generate_report(ranked, payload, output_dir=output_dir)
 
     return ranked
@@ -112,6 +181,22 @@ def cmd_run(
     lookaheads:   Optional[list[int]]  = None,
     enriched_csv: Optional[str]        = None,
 ) -> None:
+    """Run the analysis pipeline for one or more lookahead values.
+
+    Purpose:
+        Load an enriched CSV, run the analysis for each requested lookahead, and
+        summarise the outcomes in a sweep CSV.
+
+    Inputs:
+        timeframe: The timeframe name used to locate the default CSV file.
+        payload_path: JSON file containing the analysis configuration.
+        output_root: Directory where per-lookahead result folders will be created.
+        lookaheads: Optional list of lookahead values to sweep.
+        enriched_csv: Optional explicit CSV path; otherwise a default is used.
+
+    Side effects:
+        Reads the enriched payload CSV and writes sweep summaries to disk.
+    """
     if enriched_csv is None:
         enriched_csv = f"payload_{timeframe}.csv"
 
@@ -144,7 +229,8 @@ def cmd_run(
             "top_condition":    ranked[0]["label"]             if ranked else None,
         })
 
-    # ── Sweep summary ──────────────────────────────────────
+    # Sweep summary is a lightweight aggregate used to compare multiple
+    # lookahead values at a glance.
     if len(lookaheads) > 1:
         print(f"\n{'='*60}")
         print("  SWEEP SUMMARY")
@@ -163,6 +249,7 @@ def cmd_run(
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
 def build_parser() -> argparse.ArgumentParser:
+    """Construct the CLI parser for prepare/run/all commands."""
     TF_CHOICES = ["M1", "M5", "M15", "H1", "H4", "D1", "W1", "MN1"]
 
     parser = argparse.ArgumentParser(
@@ -206,6 +293,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    """Parse CLI arguments and dispatch to the requested command."""
     parser = build_parser()
     args   = parser.parse_args()
 

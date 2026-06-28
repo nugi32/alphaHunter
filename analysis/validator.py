@@ -1,3 +1,11 @@
+"""Out-of-sample validation for candidate condition combinations.
+
+This module guards against overfitting. A pattern that only looks strong in one
+slice of history may be a coincidence rather than a repeatable edge. The
+validator therefore re-evaluates each surviving candidate across multiple time
+splits and only keeps those that remain directionally consistent.
+"""
+
 import numpy as np
 import pandas as pd
 
@@ -12,45 +20,36 @@ def _measure_on_split(
     payload: dict,
     candidate: dict,
 ) -> dict:
-    """
-    Re-measure a candidate's reactions using only candles in [start, end).
-    Positions are rebased to the split slice.
+    """Re-measure a candidate using only the candles in one time slice.
+
+    Purpose:
+        Test whether the same condition remains predictive on a train/validation/
+        out-of-sample slice.
+
+    Inputs:
+        df_full: Full dataframe.
+        positions: Match positions from the full dataset.
+        start/end: Subset bounds.
+        payload: Configuration for the validation run.
+        candidate: Candidate dictionary being re-tested.
+
+    Outputs:
+        A result dictionary describing whether the candidate survived the split.
     """
     split_df = df_full.iloc[start:end].reset_index(drop=True)
 
-    split_pos = [
-        p - start
-        for p in positions
-        if start <= p < end
-    ]
+    split_pos = [p - start for p in positions if start <= p < end]
 
-    min_split_samples = max(
-        10,
-        payload.get("min_samples", 30) // 3,
-    )
+    min_split_samples = max(10, payload.get("min_samples", 30) // 3)
 
     if len(split_pos) < min_split_samples:
-        return {
-            "status": "insufficient",
-            "count": len(split_pos),
-        }
+        return {"status": "insufficient", "count": len(split_pos)}
 
-    fake = {
-        **candidate,
-        "match_index": split_pos,
-    }
-
-    result = measure_reactions(
-        split_df,
-        [fake],
-        payload,
-    )
+    fake = {**candidate, "match_index": split_pos}
+    result = measure_reactions(split_df, [fake], payload)
 
     if not result:
-        return {
-            "status": "no_reactions",
-            "count": len(split_pos),
-        }
+        return {"status": "no_reactions", "count": len(split_pos)}
 
     r = result[0]
 
@@ -58,10 +57,7 @@ def _measure_on_split(
         "status": "ok",
         "count": r["valid_count"],
         "dominant_dir": r["dominant_dir"],
-        "dir_pct": max(
-            r["bull_pct"],
-            r["bear_pct"],
-        ),
+        "dir_pct": max(r["bull_pct"], r["bear_pct"]),
         "mag_atr_mean": r.get("mag_atr_mean"),
         "mag_atr_std": r.get("mag_atr_std"),
     }
@@ -72,38 +68,37 @@ def validate_overfit(
     df: pd.DataFrame,
     payload: dict,
 ) -> list[dict]:
-    """
-    Step 9 — Out-of-sample stability check.
+    """Validate candidates over multiple time splits.
 
-    Splits:
-        train
-        validation
-        oos
+    Purpose:
+        Discard candidates that only appear strong in one historical window.
+
+    Inputs:
+        candidates: Candidates that survived the consistency filter.
+        df: Full dataframe used for the validation slices.
+        payload: Contains validation_split, min_direction_pct, and dir_grace.
+
+    Outputs:
+        A list of stable candidates with split_results attached.
+
+    Algorithm:
+        The dataframe is divided into train, validation, and out-of-sample slices.
+        Each candidate is remeasured on each slice. A candidate is accepted only
+        when at least two splits remain valid and the directional signal does not
+        flip or degrade too severely.
+
+    Why this matters:
+        This is the main safeguard against reporting a pattern that only happened
+        to be significant in a single period of history.
     """
     n = len(df)
 
-    val_split = payload.get(
-        "validation_split",
-        0.2,
-    )
+    val_split = payload.get("validation_split", 0.2)
+    min_dir_pct = payload.get("min_direction_pct", 65.0)
+    dir_grace = payload.get("dir_grace", 0.80)
 
-    min_dir_pct = payload.get(
-        "min_direction_pct",
-        65.0,
-    )
-
-    dir_grace = payload.get(
-        "dir_grace",
-        0.80,
-    )
-
-    train_end = int(
-        n * (1 - 2 * val_split)
-    )
-
-    val_end = int(
-        n * (1 - val_split)
-    )
+    train_end = int(n * (1 - 2 * val_split))
+    val_end = int(n * (1 - val_split))
 
     splits = {
         "train": (0, train_end),
@@ -117,8 +112,7 @@ def validate_overfit(
     for idx, cand in enumerate(candidates, 1):
         if idx % 100 == 0 or idx == total:
             print(
-                f"\r  Validating {idx}/{total} … "
-                f"passed: {len(valid)}",
+                f"\r  Validating {idx}/{total} … passed: {len(valid)}",
                 end="",
                 flush=True,
             )
@@ -136,31 +130,15 @@ def validate_overfit(
                 cand,
             )
 
-        ok = [
-            v
-            for v in split_results.values()
-            if v.get("status") == "ok"
-        ]
-
+        ok = [v for v in split_results.values() if v.get("status") == "ok"]
         if len(ok) < 2:
             continue
 
-        dirs = [
-            s["dominant_dir"]
-            for s in ok
-        ]
-
-        dir_pcts = [
-            s["dir_pct"]
-            for s in ok
-        ]
+        dirs = [s["dominant_dir"] for s in ok]
+        dir_pcts = [s["dir_pct"] for s in ok]
 
         direction_flipped = len(set(dirs)) > 1
-
-        direction_degraded = any(
-            p < min_dir_pct * dir_grace
-            for p in dir_pcts
-        )
+        direction_degraded = any(p < min_dir_pct * dir_grace for p in dir_pcts)
 
         if direction_flipped or direction_degraded:
             continue

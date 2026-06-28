@@ -6,1352 +6,1352 @@
 
 ---
 
-## #1 — `ADX_trending + EMA13_below_EMA21 + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross`
+## #1 — `close_above_BB_UPPER_20_2 + MACD_9_21_bear_cross + ATR7_above_ATR13`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.7303** |
-| Match Count | 127 |
+| Consistency Score | **0.6586** |
+| Match Count | 97 |
 | Dominant Direction | BULLISH |
-| Direction % | 70.1% |
-| Mag ATR Mean | 1.5932 |
-| Mag ATR Std | 0.7025 |
-| Mag CV | 0.4409 |
-| Timing (candles) | 3.82 |
-| Persistence | 3.5 |
-| Frequency | 2.1825% |
+| Direction % | 66.0% |
+| Mag ATR Mean | 2.2553 |
+| Mag ATR Std | 1.0836 |
+| Mag CV | 0.4805 |
+| Timing (candles) | 4.05 |
+| Persistence | 3.23 |
+| Frequency | 1.667% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     71 samples  bullish   77.5%  mag_atr=1.6612
-    val       29 samples  bullish   58.6%  mag_atr=1.3831
-    oos       27 samples  bullish   63.0%  mag_atr=1.6401
+    train     57 samples  bullish   66.7%  mag_atr=2.2384
+    val       24 samples  bullish   62.5%  mag_atr=2.4335
+    oos       16 samples  bullish   68.8%  mag_atr=2.0482
 ```
 
-> When [ADX_trending + EMA13_below_EMA21 + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 70.1% of the time with an average move of 1.59 ATR (moderate variance) and stable repetition across validation splits.
+> When [close_above_BB_UPPER_20_2 + MACD_9_21_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 66.0% of the time with an average move of 2.26 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #2 — `ADX_trending + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross`
+## #2 — `STO_K_14_oversold + ADX_strong_trend + EMA21_above_Close`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.7292** |
-| Match Count | 129 |
-| Dominant Direction | BULLISH |
-| Direction % | 69.8% |
-| Mag ATR Mean | 1.6102 |
-| Mag ATR Std | 0.7199 |
-| Mag CV | 0.4471 |
-| Timing (candles) | 3.82 |
-| Persistence | 3.47 |
-| Frequency | 2.2169% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     72 samples  bullish   77.8%  mag_atr=1.6622
-    val       30 samples  bullish   56.7%  mag_atr=1.4584
-    oos       27 samples  bullish   63.0%  mag_atr=1.6401
-```
-
-> When [ADX_trending + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 69.8% of the time with an average move of 1.61 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #3 — `ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7292** |
-| Match Count | 129 |
-| Dominant Direction | BULLISH |
-| Direction % | 69.8% |
-| Mag ATR Mean | 1.6102 |
-| Mag ATR Std | 0.7199 |
-| Mag CV | 0.4471 |
-| Timing (candles) | 3.82 |
-| Persistence | 3.47 |
-| Frequency | 2.2169% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     72 samples  bullish   77.8%  mag_atr=1.6622
-    val       30 samples  bullish   56.7%  mag_atr=1.4584
-    oos       27 samples  bullish   63.0%  mag_atr=1.6401
-```
-
-> When [ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 69.8% of the time with an average move of 1.61 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #4 — `ADX_trending + EMA13_below_EMA21 + EMA50_above_EMA200 + close_below_EMA200 + MACD_9_21_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7244** |
-| Match Count | 124 |
-| Dominant Direction | BULLISH |
-| Direction % | 69.3% |
-| Mag ATR Mean | 1.5917 |
-| Mag ATR Std | 0.709 |
-| Mag CV | 0.4454 |
-| Timing (candles) | 3.81 |
-| Persistence | 3.49 |
-| Frequency | 2.131% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     71 samples  bullish   77.5%  mag_atr=1.6612
-    val       27 samples  bullish   55.6%  mag_atr=1.3774
-    oos       26 samples  bullish   61.5%  mag_atr=1.6245
-```
-
-> When [ADX_trending + EMA13_below_EMA21 + EMA50_above_EMA200 + close_below_EMA200 + MACD_9_21_bull_cross] occurs, price historically reacts BULLISH 69.3% of the time with an average move of 1.59 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #5 — `ADX_trending + EMA50_above_EMA200 + close_below_EMA200 + MACD_9_21_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7233** |
-| Match Count | 126 |
-| Dominant Direction | BULLISH |
-| Direction % | 69.0% |
-| Mag ATR Mean | 1.6091 |
-| Mag ATR Std | 0.7266 |
-| Mag CV | 0.4516 |
-| Timing (candles) | 3.81 |
-| Persistence | 3.45 |
-| Frequency | 2.1653% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     72 samples  bullish   77.8%  mag_atr=1.6622
-    val       28 samples  bullish   53.6%  mag_atr=1.4583
-    oos       26 samples  bullish   61.5%  mag_atr=1.6245
-```
-
-> When [ADX_trending + EMA50_above_EMA200 + close_below_EMA200 + MACD_9_21_bull_cross] occurs, price historically reacts BULLISH 69.0% of the time with an average move of 1.61 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #6 — `ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA200 + MACD_9_21_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7233** |
-| Match Count | 126 |
-| Dominant Direction | BULLISH |
-| Direction % | 69.0% |
-| Mag ATR Mean | 1.6091 |
-| Mag ATR Std | 0.7266 |
-| Mag CV | 0.4516 |
-| Timing (candles) | 3.81 |
-| Persistence | 3.45 |
-| Frequency | 2.1653% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     72 samples  bullish   77.8%  mag_atr=1.6622
-    val       28 samples  bullish   53.6%  mag_atr=1.4583
-    oos       26 samples  bullish   61.5%  mag_atr=1.6245
-```
-
-> When [ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA200 + MACD_9_21_bull_cross] occurs, price historically reacts BULLISH 69.0% of the time with an average move of 1.61 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #7 — `ADX_trending + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross + MACD_9_21_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7233** |
-| Match Count | 126 |
-| Dominant Direction | BULLISH |
-| Direction % | 69.0% |
-| Mag ATR Mean | 1.6091 |
-| Mag ATR Std | 0.7266 |
-| Mag CV | 0.4516 |
-| Timing (candles) | 3.81 |
-| Persistence | 3.45 |
-| Frequency | 2.1653% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     72 samples  bullish   77.8%  mag_atr=1.6622
-    val       28 samples  bullish   53.6%  mag_atr=1.4583
-    oos       26 samples  bullish   61.5%  mag_atr=1.6245
-```
-
-> When [ADX_trending + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross + MACD_9_21_bull_cross] occurs, price historically reacts BULLISH 69.0% of the time with an average move of 1.61 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #8 — `STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7174** |
-| Match Count | 131 |
-| Dominant Direction | BULLISH |
-| Direction % | 67.2% |
-| Mag ATR Mean | 1.7537 |
-| Mag ATR Std | 0.8137 |
-| Mag CV | 0.464 |
-| Timing (candles) | 3.84 |
-| Persistence | 3.57 |
-| Frequency | 2.2512% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     83 samples  bullish   65.1%  mag_atr=1.8148
-    val       20 samples  bullish   65.0%  mag_atr=1.4563
-    oos       28 samples  bullish   75.0%  mag_atr=1.7849
-```
-
-> When [STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200] occurs, price historically reacts BULLISH 67.2% of the time with an average move of 1.75 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #9 — `STO_K_21_oversold + ADX_trending + EMA13_below_EMA21 + EMA21_below_EMA50 + EMA50_above_EMA200`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7174** |
-| Match Count | 131 |
-| Dominant Direction | BULLISH |
-| Direction % | 67.2% |
-| Mag ATR Mean | 1.7537 |
-| Mag ATR Std | 0.8137 |
-| Mag CV | 0.464 |
-| Timing (candles) | 3.84 |
-| Persistence | 3.57 |
-| Frequency | 2.2512% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     83 samples  bullish   65.1%  mag_atr=1.8148
-    val       20 samples  bullish   65.0%  mag_atr=1.4563
-    oos       28 samples  bullish   75.0%  mag_atr=1.7849
-```
-
-> When [STO_K_21_oversold + ADX_trending + EMA13_below_EMA21 + EMA21_below_EMA50 + EMA50_above_EMA200] occurs, price historically reacts BULLISH 67.2% of the time with an average move of 1.75 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #10 — `STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA21_above_Close + EMA50_above_EMA200`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7174** |
-| Match Count | 131 |
-| Dominant Direction | BULLISH |
-| Direction % | 67.2% |
-| Mag ATR Mean | 1.7537 |
-| Mag ATR Std | 0.8137 |
-| Mag CV | 0.464 |
-| Timing (candles) | 3.84 |
-| Persistence | 3.57 |
-| Frequency | 2.2512% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     83 samples  bullish   65.1%  mag_atr=1.8148
-    val       20 samples  bullish   65.0%  mag_atr=1.4563
-    oos       28 samples  bullish   75.0%  mag_atr=1.7849
-```
-
-> When [STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA21_above_Close + EMA50_above_EMA200] occurs, price historically reacts BULLISH 67.2% of the time with an average move of 1.75 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #11 — `STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7174** |
-| Match Count | 131 |
-| Dominant Direction | BULLISH |
-| Direction % | 67.2% |
-| Mag ATR Mean | 1.7537 |
-| Mag ATR Std | 0.8137 |
-| Mag CV | 0.464 |
-| Timing (candles) | 3.84 |
-| Persistence | 3.57 |
-| Frequency | 2.2512% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     83 samples  bullish   65.1%  mag_atr=1.8148
-    val       20 samples  bullish   65.0%  mag_atr=1.4563
-    oos       28 samples  bullish   75.0%  mag_atr=1.7849
-```
-
-> When [STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA21] occurs, price historically reacts BULLISH 67.2% of the time with an average move of 1.75 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #12 — `RSI7_overbought + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7134** |
-| Match Count | 118 |
-| Dominant Direction | BULLISH |
-| Direction % | 66.1% |
-| Mag ATR Mean | 2.2714 |
-| Mag ATR Std | 0.9669 |
-| Mag CV | 0.4257 |
-| Timing (candles) | 4.02 |
-| Persistence | 3.14 |
-| Frequency | 2.0278% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     64 samples  bullish   73.4%  mag_atr=2.1925
-    val       26 samples  bullish   57.7%  mag_atr=2.2966
-    oos       28 samples  bullish   57.1%  mag_atr=2.4284
-```
-
-> When [RSI7_overbought + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 66.1% of the time with an average move of 2.27 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #13 — `ADX_trending + EMA21_above_Close + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7129** |
-| Match Count | 114 |
-| Dominant Direction | BULLISH |
-| Direction % | 69.3% |
-| Mag ATR Mean | 1.6578 |
-| Mag ATR Std | 0.7431 |
-| Mag CV | 0.4482 |
-| Timing (candles) | 3.82 |
-| Persistence | 3.46 |
-| Frequency | 1.9591% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     62 samples  bullish   79.0%  mag_atr=1.734
-    val       29 samples  bullish   55.2%  mag_atr=1.4514
-    oos       23 samples  bullish   60.9%  mag_atr=1.7127
-```
-
-> When [ADX_trending + EMA21_above_Close + EMA50_above_EMA200 + close_below_EMA200 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 69.3% of the time with an average move of 1.66 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #14 — `ADX_trending + EMA50_above_EMA200 + close_below_EMA21 + close_below_EMA200 + MACD_12_26_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7129** |
-| Match Count | 114 |
-| Dominant Direction | BULLISH |
-| Direction % | 69.3% |
-| Mag ATR Mean | 1.6578 |
-| Mag ATR Std | 0.7431 |
-| Mag CV | 0.4482 |
-| Timing (candles) | 3.82 |
-| Persistence | 3.46 |
-| Frequency | 1.9591% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     62 samples  bullish   79.0%  mag_atr=1.734
-    val       29 samples  bullish   55.2%  mag_atr=1.4514
-    oos       23 samples  bullish   60.9%  mag_atr=1.7127
-```
-
-> When [ADX_trending + EMA50_above_EMA200 + close_below_EMA21 + close_below_EMA200 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 69.3% of the time with an average move of 1.66 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #15 — `EMA21_above_EMA50 + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7105** |
-| Match Count | 116 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.5% |
-| Mag ATR Mean | 2.2896 |
-| Mag ATR Std | 0.9649 |
-| Mag CV | 0.4214 |
-| Timing (candles) | 4.02 |
-| Persistence | 3.11 |
-| Frequency | 1.9935% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     62 samples  bullish   72.6%  mag_atr=2.224
-    val       26 samples  bullish   57.7%  mag_atr=2.2966
-    oos       28 samples  bullish   57.1%  mag_atr=2.4284
-```
-
-> When [EMA21_above_EMA50 + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.5% of the time with an average move of 2.29 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #16 — `EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7100** |
-| Match Count | 120 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.2546 |
-| Mag ATR Std | 0.9691 |
-| Mag CV | 0.4298 |
-| Timing (candles) | 4.0 |
-| Persistence | 3.1 |
-| Frequency | 2.0622% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     64 samples  bullish   73.4%  mag_atr=2.1925
-    val       28 samples  bullish   53.6%  mag_atr=2.2226
-    oos       28 samples  bullish   57.1%  mag_atr=2.4284
-```
-
-> When [EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.25 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #17 — `EMA13_above_EMA21 + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7100** |
-| Match Count | 120 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.2546 |
-| Mag ATR Std | 0.9691 |
-| Mag CV | 0.4298 |
-| Timing (candles) | 4.0 |
-| Persistence | 3.1 |
-| Frequency | 2.0622% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     64 samples  bullish   73.4%  mag_atr=2.1925
-    val       28 samples  bullish   53.6%  mag_atr=2.2226
-    oos       28 samples  bullish   57.1%  mag_atr=2.4284
-```
-
-> When [EMA13_above_EMA21 + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.25 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #18 — `EMA21_below_Close + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7100** |
-| Match Count | 120 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.2546 |
-| Mag ATR Std | 0.9691 |
-| Mag CV | 0.4298 |
-| Timing (candles) | 4.0 |
-| Persistence | 3.1 |
-| Frequency | 2.0622% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     64 samples  bullish   73.4%  mag_atr=2.1925
-    val       28 samples  bullish   53.6%  mag_atr=2.2226
-    oos       28 samples  bullish   57.1%  mag_atr=2.4284
-```
-
-> When [EMA21_below_Close + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.25 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #19 — `EMA50_above_EMA200 + close_above_EMA21 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7100** |
-| Match Count | 120 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.2546 |
-| Mag ATR Std | 0.9691 |
-| Mag CV | 0.4298 |
-| Timing (candles) | 4.0 |
-| Persistence | 3.1 |
-| Frequency | 2.0622% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     64 samples  bullish   73.4%  mag_atr=2.1925
-    val       28 samples  bullish   53.6%  mag_atr=2.2226
-    oos       28 samples  bullish   57.1%  mag_atr=2.4284
-```
-
-> When [EMA50_above_EMA200 + close_above_EMA21 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.25 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #20 — `EMA50_above_EMA200 + close_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7100** |
-| Match Count | 120 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.2546 |
-| Mag ATR Std | 0.9691 |
-| Mag CV | 0.4298 |
-| Timing (candles) | 4.0 |
-| Persistence | 3.1 |
-| Frequency | 2.0622% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     64 samples  bullish   73.4%  mag_atr=2.1925
-    val       28 samples  bullish   53.6%  mag_atr=2.2226
-    oos       28 samples  bullish   57.1%  mag_atr=2.4284
-```
-
-> When [EMA50_above_EMA200 + close_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.25 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #21 — `EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + MACD_12_26_hist_positive + CCI21_overbought + ATR14_above_ATR21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7100** |
-| Match Count | 120 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.2546 |
-| Mag ATR Std | 0.9691 |
-| Mag CV | 0.4298 |
-| Timing (candles) | 4.0 |
-| Persistence | 3.1 |
-| Frequency | 2.0622% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     64 samples  bullish   73.4%  mag_atr=2.1925
-    val       28 samples  bullish   53.6%  mag_atr=2.2226
-    oos       28 samples  bullish   57.1%  mag_atr=2.4284
-```
-
-> When [EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + MACD_12_26_hist_positive + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.25 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #22 — `EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21 + ATR7_above_ATR13`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7026** |
-| Match Count | 113 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.5% |
-| Mag ATR Mean | 2.2262 |
-| Mag ATR Std | 0.9529 |
-| Mag CV | 0.428 |
-| Timing (candles) | 3.99 |
-| Persistence | 3.14 |
-| Frequency | 1.9419% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     60 samples  bullish   71.7%  mag_atr=2.1963
-    val       27 samples  bullish   55.6%  mag_atr=2.2454
-    oos       26 samples  bullish   61.5%  mag_atr=2.275
-```
-
-> When [EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21 + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.5% of the time with an average move of 2.23 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #23 — `ADX_trending + EMA13_below_EMA21 + EMA50_above_EMA200 + close_below_EMA200 + MACD_8_21_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.7011** |
-| Match Count | 107 |
-| Dominant Direction | BULLISH |
-| Direction % | 71.0% |
-| Mag ATR Mean | 1.5528 |
-| Mag ATR Std | 0.7187 |
-| Mag CV | 0.4628 |
-| Timing (candles) | 3.77 |
-| Persistence | 3.5 |
-| Frequency | 1.8388% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     60 samples  bullish   83.3%  mag_atr=1.6057
-    val       25 samples  bullish   52.0%  mag_atr=1.3544
-    oos       22 samples  bullish   59.1%  mag_atr=1.6342
-```
-
-> When [ADX_trending + EMA13_below_EMA21 + EMA50_above_EMA200 + close_below_EMA200 + MACD_8_21_bull_cross] occurs, price historically reacts BULLISH 71.0% of the time with an average move of 1.55 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #24 — `STO_K_14_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6897** |
-| Match Count | 105 |
-| Dominant Direction | BULLISH |
-| Direction % | 68.6% |
-| Mag ATR Mean | 1.7269 |
-| Mag ATR Std | 0.7898 |
-| Mag CV | 0.4574 |
-| Timing (candles) | 3.84 |
-| Persistence | 3.54 |
-| Frequency | 1.8044% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     62 samples  bullish   66.1%  mag_atr=1.8222
-    val       19 samples  bullish   68.4%  mag_atr=1.4876
-    oos       24 samples  bullish   75.0%  mag_atr=1.6699
-```
-
-> When [STO_K_14_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200] occurs, price historically reacts BULLISH 68.6% of the time with an average move of 1.73 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #25 — `STO_K_14_oversold + ADX_trending + EMA13_below_EMA21 + EMA21_below_EMA50 + EMA50_above_EMA200`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6897** |
-| Match Count | 105 |
-| Dominant Direction | BULLISH |
-| Direction % | 68.6% |
-| Mag ATR Mean | 1.7269 |
-| Mag ATR Std | 0.7898 |
-| Mag CV | 0.4574 |
-| Timing (candles) | 3.84 |
-| Persistence | 3.54 |
-| Frequency | 1.8044% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     62 samples  bullish   66.1%  mag_atr=1.8222
-    val       19 samples  bullish   68.4%  mag_atr=1.4876
-    oos       24 samples  bullish   75.0%  mag_atr=1.6699
-```
-
-> When [STO_K_14_oversold + ADX_trending + EMA13_below_EMA21 + EMA21_below_EMA50 + EMA50_above_EMA200] occurs, price historically reacts BULLISH 68.6% of the time with an average move of 1.73 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #26 — `STO_K_14_oversold + ADX_trending + EMA21_below_EMA50 + EMA21_above_Close + EMA50_above_EMA200`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6897** |
-| Match Count | 105 |
-| Dominant Direction | BULLISH |
-| Direction % | 68.6% |
-| Mag ATR Mean | 1.7269 |
-| Mag ATR Std | 0.7898 |
-| Mag CV | 0.4574 |
-| Timing (candles) | 3.84 |
-| Persistence | 3.54 |
-| Frequency | 1.8044% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     62 samples  bullish   66.1%  mag_atr=1.8222
-    val       19 samples  bullish   68.4%  mag_atr=1.4876
-    oos       24 samples  bullish   75.0%  mag_atr=1.6699
-```
-
-> When [STO_K_14_oversold + ADX_trending + EMA21_below_EMA50 + EMA21_above_Close + EMA50_above_EMA200] occurs, price historically reacts BULLISH 68.6% of the time with an average move of 1.73 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #27 — `STO_K_14_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA21`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6897** |
-| Match Count | 105 |
-| Dominant Direction | BULLISH |
-| Direction % | 68.6% |
-| Mag ATR Mean | 1.7269 |
-| Mag ATR Std | 0.7898 |
-| Mag CV | 0.4574 |
-| Timing (candles) | 3.84 |
-| Persistence | 3.54 |
-| Frequency | 1.8044% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     62 samples  bullish   66.1%  mag_atr=1.8222
-    val       19 samples  bullish   68.4%  mag_atr=1.4876
-    oos       24 samples  bullish   75.0%  mag_atr=1.6699
-```
-
-> When [STO_K_14_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA21] occurs, price historically reacts BULLISH 68.6% of the time with an average move of 1.73 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #28 — `STO_K_14_oversold + STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6863** |
-| Match Count | 104 |
-| Dominant Direction | BULLISH |
-| Direction % | 68.3% |
-| Mag ATR Mean | 1.7289 |
-| Mag ATR Std | 0.7933 |
-| Mag CV | 0.4588 |
-| Timing (candles) | 3.83 |
-| Persistence | 3.56 |
-| Frequency | 1.7872% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     61 samples  bullish   65.6%  mag_atr=1.8272
-    val       19 samples  bullish   68.4%  mag_atr=1.4876
-    oos       24 samples  bullish   75.0%  mag_atr=1.6699
-```
-
-> When [STO_K_14_oversold + STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200] occurs, price historically reacts BULLISH 68.3% of the time with an average move of 1.73 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #29 — `RSI7_overbought + MACD_12_26_bear_cross + CCI14_overbought + ATR14_above_ATR21 + ATR7_above_ATR13`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6812** |
-| Match Count | 107 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.4% |
-| Mag ATR Mean | 2.3285 |
-| Mag ATR Std | 1.0797 |
-| Mag CV | 0.4637 |
-| Timing (candles) | 3.93 |
-| Persistence | 3.13 |
-| Frequency | 1.8388% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     59 samples  bullish   64.4%  mag_atr=2.3492
-    val       28 samples  bullish   60.7%  mag_atr=2.2643
-    oos       20 samples  bullish   75.0%  mag_atr=2.3573
-```
-
-> When [RSI7_overbought + MACD_12_26_bear_cross + CCI14_overbought + ATR14_above_ATR21 + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.4% of the time with an average move of 2.33 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #30 — `STO_D_21_overbought + MACD_12_26_bear_cross + CCI14_overbought + ATR14_above_ATR21 + ATR7_above_ATR13`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6808** |
+| Consistency Score | **0.6451** |
 | Match Count | 106 |
 | Dominant Direction | BULLISH |
 | Direction % | 65.1% |
-| Mag ATR Mean | 2.4059 |
-| Mag ATR Std | 1.0886 |
-| Mag CV | 0.4525 |
-| Timing (candles) | 4.0 |
-| Persistence | 3.16 |
+| Mag ATR Mean | 1.9482 |
+| Mag ATR Std | 1.1598 |
+| Mag CV | 0.5953 |
+| Timing (candles) | 3.62 |
+| Persistence | 3.34 |
 | Frequency | 1.8216% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     60 samples  bullish   60.0%  mag_atr=2.4054
-    val       28 samples  bullish   67.9%  mag_atr=2.3809
-    oos       18 samples  bullish   77.8%  mag_atr=2.4465
+    train     51 samples  bullish   66.7%  mag_atr=2.3333
+    val       23 samples  bullish   69.6%  mag_atr=1.843
+    oos       32 samples  bullish   59.4%  mag_atr=1.4101
 ```
 
-> When [STO_D_21_overbought + MACD_12_26_bear_cross + CCI14_overbought + ATR14_above_ATR21 + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.1% of the time with an average move of 2.41 ATR (moderate variance) and stable repetition across validation splits.
+> When [STO_K_14_oversold + ADX_strong_trend + EMA21_above_Close] occurs, price historically reacts BULLISH 65.1% of the time with an average move of 1.95 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #31 — `STO_D_21_overbought + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21`
+## #3 — `STO_K_14_oversold + ADX_strong_trend + close_below_EMA21`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6771** |
-| Match Count | 101 |
+| Consistency Score | **0.6451** |
+| Match Count | 106 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.3% |
-| Mag ATR Mean | 2.3195 |
-| Mag ATR Std | 0.998 |
-| Mag CV | 0.4303 |
-| Timing (candles) | 4.08 |
-| Persistence | 3.14 |
-| Frequency | 1.7357% |
+| Direction % | 65.1% |
+| Mag ATR Mean | 1.9482 |
+| Mag ATR Std | 1.1598 |
+| Mag CV | 0.5953 |
+| Timing (candles) | 3.62 |
+| Persistence | 3.34 |
+| Frequency | 1.8216% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     56 samples  bullish   71.4%  mag_atr=2.2519
-    val       23 samples  bullish   60.9%  mag_atr=2.3343
-    oos       22 samples  bullish   54.5%  mag_atr=2.476
+    train     51 samples  bullish   66.7%  mag_atr=2.3333
+    val       23 samples  bullish   69.6%  mag_atr=1.843
+    oos       32 samples  bullish   59.4%  mag_atr=1.4101
 ```
 
-> When [STO_D_21_overbought + EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.3% of the time with an average move of 2.32 ATR (moderate variance) and stable repetition across validation splits.
+> When [STO_K_14_oversold + ADX_strong_trend + close_below_EMA21] occurs, price historically reacts BULLISH 65.1% of the time with an average move of 1.95 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #32 — `ADX_trending + EMA21_above_Close + EMA50_above_EMA100 + MACD_12_26_bull_cross`
+## #4 — `STO_K_21_oversold + EMA50_above_EMA200 + MACD_12_26_bull_cross`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6766** |
-| Match Count | 125 |
+| Consistency Score | **0.6380** |
+| Match Count | 67 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.6% |
-| Mag ATR Mean | 1.7176 |
-| Mag ATR Std | 0.7795 |
-| Mag CV | 0.4538 |
+| Direction % | 73.1% |
+| Mag ATR Mean | 1.8973 |
+| Mag ATR Std | 0.7936 |
+| Mag CV | 0.4183 |
 | Timing (candles) | 3.93 |
-| Persistence | 3.23 |
-| Frequency | 2.1481% |
+| Persistence | 3.87 |
+| Frequency | 1.1514% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     96 samples  bullish   58.3%  mag_atr=1.689
-    val     [insufficient]
-    oos       27 samples  bullish   88.9%  mag_atr=1.8385
+    train     36 samples  bullish   80.6%  mag_atr=2.0694
+    val       14 samples  bullish   71.4%  mag_atr=1.5633
+    oos       17 samples  bullish   58.8%  mag_atr=1.8079
 ```
 
-> When [ADX_trending + EMA21_above_Close + EMA50_above_EMA100 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 65.6% of the time with an average move of 1.72 ATR (moderate variance) and stable repetition across validation splits.
+> When [STO_K_21_oversold + EMA50_above_EMA200 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 73.1% of the time with an average move of 1.90 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #33 — `ADX_trending + EMA50_above_EMA100 + close_below_EMA21 + MACD_12_26_bull_cross`
+## #5 — `close_above_BB_UPPER_20_2 + MACD_9_21_bear_cross + ATR14_above_ATR21`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6766** |
-| Match Count | 125 |
+| Consistency Score | **0.6332** |
+| Match Count | 83 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.6% |
-| Mag ATR Mean | 1.7176 |
-| Mag ATR Std | 0.7795 |
-| Mag CV | 0.4538 |
-| Timing (candles) | 3.93 |
-| Persistence | 3.23 |
-| Frequency | 2.1481% |
+| Direction % | 65.1% |
+| Mag ATR Mean | 2.2795 |
+| Mag ATR Std | 1.0373 |
+| Mag CV | 0.4551 |
+| Timing (candles) | 4.02 |
+| Persistence | 3.12 |
+| Frequency | 1.4264% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     96 samples  bullish   58.3%  mag_atr=1.689
-    val     [insufficient]
-    oos       27 samples  bullish   88.9%  mag_atr=1.8385
+    train     47 samples  bullish   68.1%  mag_atr=2.2869
+    val       18 samples  bullish   61.1%  mag_atr=2.1699
+    oos       18 samples  bullish   61.1%  mag_atr=2.3698
 ```
 
-> When [ADX_trending + EMA50_above_EMA100 + close_below_EMA21 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 65.6% of the time with an average move of 1.72 ATR (moderate variance) and stable repetition across validation splits.
+> When [close_above_BB_UPPER_20_2 + MACD_9_21_bear_cross + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.1% of the time with an average move of 2.28 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #34 — `ADX_trending + EMA13_below_EMA21 + EMA21_above_Close + EMA50_above_EMA100 + MACD_12_26_bull_cross`
+## #6 — `STO_K_14_oversold + ADX_strong_trend + EMA13_below_EMA21`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6766** |
-| Match Count | 125 |
+| Consistency Score | **0.6329** |
+| Match Count | 94 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.6% |
-| Mag ATR Mean | 1.7176 |
-| Mag ATR Std | 0.7795 |
-| Mag CV | 0.4538 |
-| Timing (candles) | 3.93 |
-| Persistence | 3.23 |
-| Frequency | 2.1481% |
+| Direction % | 69.2% |
+| Mag ATR Mean | 1.9988 |
+| Mag ATR Std | 1.2053 |
+| Mag CV | 0.603 |
+| Timing (candles) | 3.61 |
+| Persistence | 3.47 |
+| Frequency | 1.6154% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     96 samples  bullish   58.3%  mag_atr=1.689
-    val     [insufficient]
-    oos       27 samples  bullish   88.9%  mag_atr=1.8385
+    train     45 samples  bullish   73.3%  mag_atr=2.4491
+    val       22 samples  bullish   68.2%  mag_atr=1.8157
+    oos       27 samples  bullish   63.0%  mag_atr=1.3974
 ```
 
-> When [ADX_trending + EMA13_below_EMA21 + EMA21_above_Close + EMA50_above_EMA100 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 65.6% of the time with an average move of 1.72 ATR (moderate variance) and stable repetition across validation splits.
+> When [STO_K_14_oversold + ADX_strong_trend + EMA13_below_EMA21] occurs, price historically reacts BULLISH 69.2% of the time with an average move of 2.00 ATR (high variance) and stable repetition across validation splits.
 
 ---
 
-## #35 — `ADX_trending + EMA13_below_EMA21 + EMA50_above_EMA100 + close_below_EMA21 + MACD_12_26_bull_cross`
+## #7 — `STO_K_14_oversold + STO_K_21_oversold + ADX_strong_trend`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6766** |
-| Match Count | 125 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.6% |
-| Mag ATR Mean | 1.7176 |
-| Mag ATR Std | 0.7795 |
-| Mag CV | 0.4538 |
-| Timing (candles) | 3.93 |
-| Persistence | 3.23 |
-| Frequency | 2.1481% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     96 samples  bullish   58.3%  mag_atr=1.689
-    val     [insufficient]
-    oos       27 samples  bullish   88.9%  mag_atr=1.8385
-```
-
-> When [ADX_trending + EMA13_below_EMA21 + EMA50_above_EMA100 + close_below_EMA21 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 65.6% of the time with an average move of 1.72 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #36 — `ADX_trending + EMA21_above_Close + EMA50_above_EMA100 + close_below_EMA21 + MACD_12_26_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6766** |
-| Match Count | 125 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.6% |
-| Mag ATR Mean | 1.7176 |
-| Mag ATR Std | 0.7795 |
-| Mag CV | 0.4538 |
-| Timing (candles) | 3.93 |
-| Persistence | 3.23 |
-| Frequency | 2.1481% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     96 samples  bullish   58.3%  mag_atr=1.689
-    val     [insufficient]
-    oos       27 samples  bullish   88.9%  mag_atr=1.8385
-```
-
-> When [ADX_trending + EMA21_above_Close + EMA50_above_EMA100 + close_below_EMA21 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 65.6% of the time with an average move of 1.72 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #37 — `ADX_trending + EMA21_below_EMA50 + EMA21_above_Close + EMA50_above_EMA100 + MACD_12_26_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6743** |
-| Match Count | 124 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.3% |
-| Mag ATR Mean | 1.7132 |
-| Mag ATR Std | 0.781 |
-| Mag CV | 0.4559 |
-| Timing (candles) | 3.92 |
-| Persistence | 3.24 |
-| Frequency | 2.131% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     96 samples  bullish   58.3%  mag_atr=1.689
-    val     [insufficient]
-    oos       26 samples  bullish   88.5%  mag_atr=1.822
-```
-
-> When [ADX_trending + EMA21_below_EMA50 + EMA21_above_Close + EMA50_above_EMA100 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 65.3% of the time with an average move of 1.71 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #38 — `ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA100 + close_below_EMA21 + MACD_12_26_bull_cross`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6743** |
-| Match Count | 124 |
-| Dominant Direction | BULLISH |
-| Direction % | 65.3% |
-| Mag ATR Mean | 1.7132 |
-| Mag ATR Std | 0.781 |
-| Mag CV | 0.4559 |
-| Timing (candles) | 3.92 |
-| Persistence | 3.24 |
-| Frequency | 2.131% |
-| Overfit Status | STABLE |
-
-**Split Validation:**
-```
-    train     96 samples  bullish   58.3%  mag_atr=1.689
-    val     [insufficient]
-    oos       26 samples  bullish   88.5%  mag_atr=1.822
-```
-
-> When [ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA100 + close_below_EMA21 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 65.3% of the time with an average move of 1.71 ATR (moderate variance) and stable repetition across validation splits.
-
----
-
-## #39 — `RSI7_overbought + MACD_9_21_bear_cross + CCI14_overbought + ATR14_above_ATR21 + ATR7_above_ATR13`
-
-| Field | Value |
-|---|---|
-| Consistency Score | **0.6740** |
-| Match Count | 101 |
+| Consistency Score | **0.6305** |
+| Match Count | 98 |
 | Dominant Direction | BULLISH |
 | Direction % | 66.3% |
-| Mag ATR Mean | 2.3028 |
-| Mag ATR Std | 1.0512 |
-| Mag CV | 0.4565 |
-| Timing (candles) | 3.9 |
-| Persistence | 3.19 |
-| Frequency | 1.7357% |
+| Mag ATR Mean | 1.967 |
+| Mag ATR Std | 1.1919 |
+| Mag CV | 0.6059 |
+| Timing (candles) | 3.61 |
+| Persistence | 3.37 |
+| Frequency | 1.6841% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     57 samples  bullish   63.2%  mag_atr=2.3539
-    val       25 samples  bullish   64.0%  mag_atr=2.1911
-    oos       19 samples  bullish   79.0%  mag_atr=2.2963
+    train     48 samples  bullish   68.8%  mag_atr=2.3818
+    val       22 samples  bullish   68.2%  mag_atr=1.8157
+    oos       28 samples  bullish   60.7%  mag_atr=1.3749
 ```
 
-> When [RSI7_overbought + MACD_9_21_bear_cross + CCI14_overbought + ATR14_above_ATR21 + ATR7_above_ATR13] occurs, price historically reacts BULLISH 66.3% of the time with an average move of 2.30 ATR (moderate variance) and stable repetition across validation splits.
+> When [STO_K_14_oversold + STO_K_21_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 66.3% of the time with an average move of 1.97 ATR (high variance) and stable repetition across validation splits.
 
 ---
 
-## #40 — `STO_D_21_overbought + MACD_9_21_bear_cross + CCI14_overbought + ATR14_above_ATR21 + ATR7_above_ATR13`
+## #8 — `STO_K_14_oversold + ADX_strong_trend + EMA21_below_EMA50`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6735** |
-| Match Count | 100 |
+| Consistency Score | **0.6294** |
+| Match Count | 91 |
 | Dominant Direction | BULLISH |
-| Direction % | 66.0% |
-| Mag ATR Mean | 2.3846 |
-| Mag ATR Std | 1.0624 |
-| Mag CV | 0.4455 |
-| Timing (candles) | 3.97 |
+| Direction % | 69.2% |
+| Mag ATR Mean | 2.0344 |
+| Mag ATR Std | 1.2076 |
+| Mag CV | 0.5936 |
+| Timing (candles) | 3.64 |
+| Persistence | 3.47 |
+| Frequency | 1.5638% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     45 samples  bullish   73.3%  mag_atr=2.4491
+    val       22 samples  bullish   68.2%  mag_atr=1.8157
+    oos       24 samples  bullish   62.5%  mag_atr=1.4572
+```
+
+> When [STO_K_14_oversold + ADX_strong_trend + EMA21_below_EMA50] occurs, price historically reacts BULLISH 69.2% of the time with an average move of 2.03 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #9 — `STO_K_21_oversold + EMA50_above_EMA200 + MACD_9_21_bull_cross`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6236** |
+| Match Count | 60 |
+| Dominant Direction | BULLISH |
+| Direction % | 73.3% |
+| Mag ATR Mean | 1.8957 |
+| Mag ATR Std | 0.7994 |
+| Mag CV | 0.4217 |
+| Timing (candles) | 3.88 |
+| Persistence | 3.93 |
+| Frequency | 1.0311% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     35 samples  bullish   80.0%  mag_atr=2.0633
+    val       10 samples  bullish   70.0%  mag_atr=1.6309
+    oos       15 samples  bullish   60.0%  mag_atr=1.681
+```
+
+> When [STO_K_21_oversold + EMA50_above_EMA200 + MACD_9_21_bull_cross] occurs, price historically reacts BULLISH 73.3% of the time with an average move of 1.90 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #10 — `close_above_BB_UPPER_20_2 + MACD_8_21_bear_cross + ATR7_above_ATR13`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6196** |
+| Match Count | 73 |
+| Dominant Direction | BULLISH |
+| Direction % | 68.5% |
+| Mag ATR Mean | 2.2419 |
+| Mag ATR Std | 1.067 |
+| Mag CV | 0.4759 |
+| Timing (candles) | 4.14 |
 | Persistence | 3.22 |
-| Frequency | 1.7185% |
+| Frequency | 1.2545% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     58 samples  bullish   58.6%  mag_atr=2.412
-    val       25 samples  bullish   72.0%  mag_atr=2.3217
-    oos       17 samples  bullish   82.3%  mag_atr=2.3835
+    train     46 samples  bullish   67.4%  mag_atr=2.2793
+    val       14 samples  bullish   57.1%  mag_atr=2.2078
+    oos       13 samples  bullish   84.6%  mag_atr=2.1462
 ```
 
-> When [STO_D_21_overbought + MACD_9_21_bear_cross + CCI14_overbought + ATR14_above_ATR21 + ATR7_above_ATR13] occurs, price historically reacts BULLISH 66.0% of the time with an average move of 2.38 ATR (moderate variance) and stable repetition across validation splits.
+> When [close_above_BB_UPPER_20_2 + MACD_8_21_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 68.5% of the time with an average move of 2.24 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #41 — `EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13`
+## #11 — `RSI13_oversold + ADX_strong_trend`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6667** |
-| Match Count | 103 |
+| Consistency Score | **0.6078** |
+| Match Count | 82 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.3137 |
-| Mag ATR Std | 1.1195 |
-| Mag CV | 0.4839 |
-| Timing (candles) | 4.12 |
-| Persistence | 3.17 |
-| Frequency | 1.7701% |
+| Direction % | 67.1% |
+| Mag ATR Mean | 1.9735 |
+| Mag ATR Std | 1.1382 |
+| Mag CV | 0.5767 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.4092% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     59 samples  bullish   66.1%  mag_atr=2.2444
-    val       28 samples  bullish   60.7%  mag_atr=2.5403
-    oos       16 samples  bullish   68.8%  mag_atr=2.1723
+    train     44 samples  bullish   68.2%  mag_atr=2.2142
+    val       21 samples  bullish   66.7%  mag_atr=1.8596
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
 ```
 
-> When [EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.31 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI13_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 67.1% of the time with an average move of 1.97 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #42 — `EMA13_above_EMA21 + EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13`
+## #12 — `RSI13_oversold + ADX_trending + ADX_strong_trend`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6667** |
-| Match Count | 103 |
+| Consistency Score | **0.6078** |
+| Match Count | 82 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.3137 |
-| Mag ATR Std | 1.1195 |
-| Mag CV | 0.4839 |
-| Timing (candles) | 4.12 |
-| Persistence | 3.17 |
-| Frequency | 1.7701% |
+| Direction % | 67.1% |
+| Mag ATR Mean | 1.9735 |
+| Mag ATR Std | 1.1382 |
+| Mag CV | 0.5767 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.4092% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     59 samples  bullish   66.1%  mag_atr=2.2444
-    val       28 samples  bullish   60.7%  mag_atr=2.5403
-    oos       16 samples  bullish   68.8%  mag_atr=2.1723
+    train     44 samples  bullish   68.2%  mag_atr=2.2142
+    val       21 samples  bullish   66.7%  mag_atr=1.8596
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
 ```
 
-> When [EMA13_above_EMA21 + EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.31 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI13_oversold + ADX_trending + ADX_strong_trend] occurs, price historically reacts BULLISH 67.1% of the time with an average move of 1.97 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #43 — `EMA21_above_EMA50 + EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13`
+## #13 — `RSI13_oversold + ADX_strong_trend + EMA13_below_EMA21`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6667** |
-| Match Count | 103 |
+| Consistency Score | **0.6078** |
+| Match Count | 82 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.3137 |
-| Mag ATR Std | 1.1195 |
-| Mag CV | 0.4839 |
-| Timing (candles) | 4.12 |
-| Persistence | 3.17 |
-| Frequency | 1.7701% |
+| Direction % | 67.1% |
+| Mag ATR Mean | 1.9735 |
+| Mag ATR Std | 1.1382 |
+| Mag CV | 0.5767 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.4092% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     59 samples  bullish   66.1%  mag_atr=2.2444
-    val       28 samples  bullish   60.7%  mag_atr=2.5403
-    oos       16 samples  bullish   68.8%  mag_atr=2.1723
+    train     44 samples  bullish   68.2%  mag_atr=2.2142
+    val       21 samples  bullish   66.7%  mag_atr=1.8596
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
 ```
 
-> When [EMA21_above_EMA50 + EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.31 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI13_oversold + ADX_strong_trend + EMA13_below_EMA21] occurs, price historically reacts BULLISH 67.1% of the time with an average move of 1.97 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #44 — `EMA21_below_Close + EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13`
+## #14 — `RSI13_oversold + ADX_strong_trend + EMA21_above_Close`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6667** |
-| Match Count | 103 |
+| Consistency Score | **0.6078** |
+| Match Count | 82 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.3137 |
-| Mag ATR Std | 1.1195 |
-| Mag CV | 0.4839 |
-| Timing (candles) | 4.12 |
-| Persistence | 3.17 |
-| Frequency | 1.7701% |
+| Direction % | 67.1% |
+| Mag ATR Mean | 1.9735 |
+| Mag ATR Std | 1.1382 |
+| Mag CV | 0.5767 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.4092% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     59 samples  bullish   66.1%  mag_atr=2.2444
-    val       28 samples  bullish   60.7%  mag_atr=2.5403
-    oos       16 samples  bullish   68.8%  mag_atr=2.1723
+    train     44 samples  bullish   68.2%  mag_atr=2.2142
+    val       21 samples  bullish   66.7%  mag_atr=1.8596
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
 ```
 
-> When [EMA21_below_Close + EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.31 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI13_oversold + ADX_strong_trend + EMA21_above_Close] occurs, price historically reacts BULLISH 67.1% of the time with an average move of 1.97 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #45 — `EMA50_above_EMA100 + close_above_EMA21 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13`
+## #15 — `RSI13_oversold + ADX_strong_trend + close_below_EMA21`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6667** |
-| Match Count | 103 |
+| Consistency Score | **0.6078** |
+| Match Count | 82 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.3137 |
-| Mag ATR Std | 1.1195 |
-| Mag CV | 0.4839 |
-| Timing (candles) | 4.12 |
-| Persistence | 3.17 |
-| Frequency | 1.7701% |
+| Direction % | 67.1% |
+| Mag ATR Mean | 1.9735 |
+| Mag ATR Std | 1.1382 |
+| Mag CV | 0.5767 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.4092% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     59 samples  bullish   66.1%  mag_atr=2.2444
-    val       28 samples  bullish   60.7%  mag_atr=2.5403
-    oos       16 samples  bullish   68.8%  mag_atr=2.1723
+    train     44 samples  bullish   68.2%  mag_atr=2.2142
+    val       21 samples  bullish   66.7%  mag_atr=1.8596
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
 ```
 
-> When [EMA50_above_EMA100 + close_above_EMA21 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.31 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI13_oversold + ADX_strong_trend + close_below_EMA21] occurs, price historically reacts BULLISH 67.1% of the time with an average move of 1.97 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #46 — `EMA50_above_EMA100 + close_above_EMA200 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13`
+## #16 — `RSI14_oversold + ADX_strong_trend`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6667** |
-| Match Count | 103 |
+| Consistency Score | **0.6072** |
+| Match Count | 79 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.0% |
-| Mag ATR Mean | 2.3137 |
-| Mag ATR Std | 1.1195 |
-| Mag CV | 0.4839 |
-| Timing (candles) | 4.12 |
-| Persistence | 3.17 |
-| Frequency | 1.7701% |
+| Direction % | 68.3% |
+| Mag ATR Mean | 2.0048 |
+| Mag ATR Std | 1.1478 |
+| Mag CV | 0.5725 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.3576% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     59 samples  bullish   66.1%  mag_atr=2.2444
-    val       28 samples  bullish   60.7%  mag_atr=2.5403
-    oos       16 samples  bullish   68.8%  mag_atr=2.1723
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
 ```
 
-> When [EMA50_above_EMA100 + close_above_EMA200 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.31 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI14_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 68.3% of the time with an average move of 2.00 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #47 — `STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA200`
+## #17 — `RSI13_oversold + RSI14_oversold + ADX_strong_trend`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6640** |
-| Match Count | 95 |
+| Consistency Score | **0.6072** |
+| Match Count | 79 |
 | Dominant Direction | BULLISH |
-| Direction % | 66.3% |
-| Mag ATR Mean | 1.7997 |
-| Mag ATR Std | 0.8048 |
-| Mag CV | 0.4472 |
-| Timing (candles) | 3.86 |
-| Persistence | 3.51 |
-| Frequency | 1.6326% |
+| Direction % | 68.3% |
+| Mag ATR Mean | 2.0048 |
+| Mag ATR Std | 1.1478 |
+| Mag CV | 0.5725 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.3576% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     51 samples  bullish   64.7%  mag_atr=1.9708
-    val       20 samples  bullish   65.0%  mag_atr=1.4563
-    oos       24 samples  bullish   70.8%  mag_atr=1.7222
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
 ```
 
-> When [STO_K_21_oversold + ADX_trending + EMA21_below_EMA50 + EMA50_above_EMA200 + close_below_EMA200] occurs, price historically reacts BULLISH 66.3% of the time with an average move of 1.80 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI13_oversold + RSI14_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 68.3% of the time with an average move of 2.00 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #48 — `EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + close_above_BB_UPPER_50_2 + CCI21_overbought + ATR14_above_ATR21`
+## #18 — `RSI14_oversold + ADX_trending + ADX_strong_trend`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6637** |
-| Match Count | 93 |
+| Consistency Score | **0.6072** |
+| Match Count | 79 |
 | Dominant Direction | BULLISH |
-| Direction % | 65.6% |
-| Mag ATR Mean | 2.2655 |
-| Mag ATR Std | 0.9558 |
-| Mag CV | 0.4219 |
-| Timing (candles) | 3.98 |
-| Persistence | 3.18 |
-| Frequency | 1.5982% |
+| Direction % | 68.3% |
+| Mag ATR Mean | 2.0048 |
+| Mag ATR Std | 1.1478 |
+| Mag CV | 0.5725 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.3576% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     56 samples  bullish   71.4%  mag_atr=2.2756
-    val       21 samples  bullish   57.1%  mag_atr=2.3515
-    oos       16 samples  bullish   56.2%  mag_atr=2.1172
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
 ```
 
-> When [EMA50_above_EMA200 + close_above_BB_UPPER_20_2 + close_above_BB_UPPER_50_2 + CCI21_overbought + ATR14_above_ATR21] occurs, price historically reacts BULLISH 65.6% of the time with an average move of 2.27 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI14_oversold + ADX_trending + ADX_strong_trend] occurs, price historically reacts BULLISH 68.3% of the time with an average move of 2.00 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #49 — `RSI7_overbought + EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13`
+## #19 — `RSI14_oversold + ADX_strong_trend + EMA13_below_EMA21`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6635** |
-| Match Count | 100 |
+| Consistency Score | **0.6072** |
+| Match Count | 79 |
 | Dominant Direction | BULLISH |
-| Direction % | 66.0% |
-| Mag ATR Mean | 2.3292 |
-| Mag ATR Std | 1.1314 |
-| Mag CV | 0.4857 |
-| Timing (candles) | 4.13 |
-| Persistence | 3.19 |
-| Frequency | 1.7185% |
+| Direction % | 68.3% |
+| Mag ATR Mean | 2.0048 |
+| Mag ATR Std | 1.1478 |
+| Mag CV | 0.5725 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.3576% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     57 samples  bullish   66.7%  mag_atr=2.2529
-    val       27 samples  bullish   63.0%  mag_atr=2.583
-    oos       16 samples  bullish   68.8%  mag_atr=2.1723
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
 ```
 
-> When [RSI7_overbought + EMA50_above_EMA100 + close_above_BB_UPPER_20_2 + MACD_12_26_bear_cross + ATR7_above_ATR13] occurs, price historically reacts BULLISH 66.0% of the time with an average move of 2.33 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI14_oversold + ADX_strong_trend + EMA13_below_EMA21] occurs, price historically reacts BULLISH 68.3% of the time with an average move of 2.00 ATR (moderate variance) and stable repetition across validation splits.
 
 ---
 
-## #50 — `STO_D_21_overbought + EMA13_above_EMA21 + EMA21_below_EMA50 + close_below_EMA200`
+## #20 — `RSI14_oversold + ADX_strong_trend + EMA21_above_Close`
 
 | Field | Value |
 |---|---|
-| Consistency Score | **0.6634** |
-| Match Count | 105 |
-| Dominant Direction | BEARISH |
+| Consistency Score | **0.6072** |
+| Match Count | 79 |
+| Dominant Direction | BULLISH |
+| Direction % | 68.3% |
+| Mag ATR Mean | 2.0048 |
+| Mag ATR Std | 1.1478 |
+| Mag CV | 0.5725 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.3576% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
+```
+
+> When [RSI14_oversold + ADX_strong_trend + EMA21_above_Close] occurs, price historically reacts BULLISH 68.3% of the time with an average move of 2.00 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #21 — `RSI14_oversold + ADX_strong_trend + close_below_EMA21`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6072** |
+| Match Count | 79 |
+| Dominant Direction | BULLISH |
+| Direction % | 68.3% |
+| Mag ATR Mean | 2.0048 |
+| Mag ATR Std | 1.1478 |
+| Mag CV | 0.5725 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.3576% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
+```
+
+> When [RSI14_oversold + ADX_strong_trend + close_below_EMA21] occurs, price historically reacts BULLISH 68.3% of the time with an average move of 2.00 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #22 — `RSI14_oversold + ADX_strong_trend + close_below_EMA200`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6072** |
+| Match Count | 79 |
+| Dominant Direction | BULLISH |
+| Direction % | 68.3% |
+| Mag ATR Mean | 2.0048 |
+| Mag ATR Std | 1.1478 |
+| Mag CV | 0.5725 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.44 |
+| Frequency | 1.3576% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
+```
+
+> When [RSI14_oversold + ADX_strong_trend + close_below_EMA200] occurs, price historically reacts BULLISH 68.3% of the time with an average move of 2.00 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #23 — `RSI14_overbought + MACD_8_21_bear_cross + CCI14_overbought`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6069** |
+| Match Count | 74 |
+| Dominant Direction | BULLISH |
 | Direction % | 67.6% |
-| Mag ATR Mean | 1.736 |
-| Mag ATR Std | 0.7223 |
-| Mag CV | 0.4161 |
-| Timing (candles) | 3.71 |
-| Persistence | 3.28 |
-| Frequency | 1.8044% |
+| Mag ATR Mean | 2.4644 |
+| Mag ATR Std | 1.2858 |
+| Mag CV | 0.5217 |
+| Timing (candles) | 4.04 |
+| Persistence | 3.3 |
+| Frequency | 1.2717% |
 | Overfit Status | STABLE |
 
 **Split Validation:**
 ```
-    train     66 samples  bearish   75.8%  mag_atr=1.8264
-    val     [insufficient]
-    oos       25 samples  bearish   60.0%  mag_atr=1.5505
+    train     48 samples  bullish   62.5%  mag_atr=2.3659
+    val       13 samples  bullish   53.9%  mag_atr=2.836
+    oos       13 samples  bullish   100.0%  mag_atr=2.4563
 ```
 
-> When [STO_D_21_overbought + EMA13_above_EMA21 + EMA21_below_EMA50 + close_below_EMA200] occurs, price historically reacts BEARISH 67.6% of the time with an average move of 1.74 ATR (moderate variance) and stable repetition across validation splits.
+> When [RSI14_overbought + MACD_8_21_bear_cross + CCI14_overbought] occurs, price historically reacts BULLISH 67.6% of the time with an average move of 2.46 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #24 — `RSI13_oversold + ADX_strong_trend + close_below_EMA200`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6043** |
+| Match Count | 81 |
+| Dominant Direction | BULLISH |
+| Direction % | 66.7% |
+| Mag ATR Mean | 1.9817 |
+| Mag ATR Std | 1.1428 |
+| Mag CV | 0.5767 |
+| Timing (candles) | 3.37 |
+| Persistence | 3.42 |
+| Frequency | 1.392% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       21 samples  bullish   66.7%  mag_atr=1.8596
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
+```
+
+> When [RSI13_oversold + ADX_strong_trend + close_below_EMA200] occurs, price historically reacts BULLISH 66.7% of the time with an average move of 1.98 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #25 — `close_above_BB_UPPER_20_2 + MACD_8_21_bear_cross + ATR14_above_ATR21`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6032** |
+| Match Count | 61 |
+| Dominant Direction | BULLISH |
+| Direction % | 68.8% |
+| Mag ATR Mean | 2.2365 |
+| Mag ATR Std | 1.0031 |
+| Mag CV | 0.4485 |
+| Timing (candles) | 4.05 |
+| Persistence | 3.23 |
+| Frequency | 1.0483% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     37 samples  bullish   67.6%  mag_atr=2.3267
+    val       10 samples  bullish   60.0%  mag_atr=1.9872
+    oos       14 samples  bullish   78.6%  mag_atr=2.1764
+```
+
+> When [close_above_BB_UPPER_20_2 + MACD_8_21_bear_cross + ATR14_above_ATR21] occurs, price historically reacts BULLISH 68.8% of the time with an average move of 2.24 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #26 — `STO_K_14_oversold + ADX_strong_trend + close_below_EMA200`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6026** |
+| Match Count | 87 |
+| Dominant Direction | BULLISH |
+| Direction % | 65.5% |
+| Mag ATR Mean | 1.9999 |
+| Mag ATR Std | 1.2331 |
+| Mag CV | 0.6166 |
+| Timing (candles) | 3.62 |
+| Persistence | 3.3 |
+| Frequency | 1.4951% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     38 samples  bullish   65.8%  mag_atr=2.5347
+    val       22 samples  bullish   68.2%  mag_atr=1.8157
+    oos       27 samples  bullish   63.0%  mag_atr=1.3974
+```
+
+> When [STO_K_14_oversold + ADX_strong_trend + close_below_EMA200] occurs, price historically reacts BULLISH 65.5% of the time with an average move of 2.00 ATR (high variance) and stable repetition across validation splits.
+
+---
+
+## #27 — `RSI13_oversold + ADX_strong_trend + EMA21_below_EMA50`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6016** |
+| Match Count | 80 |
+| Dominant Direction | BULLISH |
+| Direction % | 66.2% |
+| Mag ATR Mean | 1.9949 |
+| Mag ATR Std | 1.1441 |
+| Mag CV | 0.5735 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.4 |
+| Frequency | 1.3748% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     44 samples  bullish   68.2%  mag_atr=2.2142
+    val       21 samples  bullish   66.7%  mag_atr=1.8596
+    oos       15 samples  bullish   60.0%  mag_atr=1.5411
+```
+
+> When [RSI13_oversold + ADX_strong_trend + EMA21_below_EMA50] occurs, price historically reacts BULLISH 66.2% of the time with an average move of 1.99 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #28 — `RSI14_oversold + ADX_strong_trend + EMA21_below_EMA50`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6012** |
+| Match Count | 77 |
+| Dominant Direction | BULLISH |
+| Direction % | 67.5% |
+| Mag ATR Mean | 2.0279 |
+| Mag ATR Std | 1.1535 |
+| Mag CV | 0.5688 |
+| Timing (candles) | 3.39 |
+| Persistence | 3.4 |
+| Frequency | 1.3233% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     43 samples  bullish   67.4%  mag_atr=2.2353
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       14 samples  bullish   64.3%  mag_atr=1.5728
+```
+
+> When [RSI14_oversold + ADX_strong_trend + EMA21_below_EMA50] occurs, price historically reacts BULLISH 67.5% of the time with an average move of 2.03 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #29 — `STO_K_14_oversold + EMA50_above_EMA200 + MACD_12_26_bull_cross`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.6001** |
+| Match Count | 51 |
+| Dominant Direction | BULLISH |
+| Direction % | 70.6% |
+| Mag ATR Mean | 1.7234 |
+| Mag ATR Std | 0.6957 |
+| Mag CV | 0.4037 |
+| Timing (candles) | 3.94 |
+| Persistence | 3.75 |
+| Frequency | 0.8764% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     23 samples  bullish   78.3%  mag_atr=1.9814
+    val       15 samples  bullish   66.7%  mag_atr=1.3893
+    oos       13 samples  bullish   61.5%  mag_atr=1.6525
+```
+
+> When [STO_K_14_oversold + EMA50_above_EMA200 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 70.6% of the time with an average move of 1.72 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #30 — `RSI7_oversold + STO_K_21_oversold + ADX_strong_trend`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5974** |
+| Match Count | 74 |
+| Dominant Direction | BULLISH |
+| Direction % | 68.9% |
+| Mag ATR Mean | 2.0334 |
+| Mag ATR Std | 1.177 |
+| Mag CV | 0.5788 |
+| Timing (candles) | 3.5 |
+| Persistence | 3.34 |
+| Frequency | 1.2717% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     35 samples  bullish   77.1%  mag_atr=2.5152
+    val       18 samples  bullish   66.7%  mag_atr=1.855
+    oos       21 samples  bullish   57.1%  mag_atr=1.3833
+```
+
+> When [RSI7_oversold + STO_K_21_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 68.9% of the time with an average move of 2.03 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #31 — `RSI14_oversold + ADX_strong_trend + EMA50_below_EMA100`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5974** |
+| Match Count | 75 |
+| Dominant Direction | BULLISH |
+| Direction % | 68.0% |
+| Mag ATR Mean | 2.0338 |
+| Mag ATR Std | 1.1676 |
+| Mag CV | 0.5741 |
+| Timing (candles) | 3.4 |
+| Persistence | 3.41 |
+| Frequency | 1.2889% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     42 samples  bullish   69.0%  mag_atr=2.24
+    val       20 samples  bullish   70.0%  mag_atr=1.9004
+    oos       13 samples  bullish   61.5%  mag_atr=1.5731
+```
+
+> When [RSI14_oversold + ADX_strong_trend + EMA50_below_EMA100] occurs, price historically reacts BULLISH 68.0% of the time with an average move of 2.03 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #32 — `RSI13_oversold + ADX_strong_trend + EMA50_below_EMA100`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5957** |
+| Match Count | 76 |
+| Dominant Direction | BULLISH |
+| Direction % | 67.1% |
+| Mag ATR Mean | 2.0208 |
+| Mag ATR Std | 1.1653 |
+| Mag CV | 0.5767 |
+| Timing (candles) | 3.37 |
+| Persistence | 3.39 |
+| Frequency | 1.3061% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     42 samples  bullish   69.0%  mag_atr=2.24
+    val       21 samples  bullish   66.7%  mag_atr=1.8596
+    oos       13 samples  bullish   61.5%  mag_atr=1.5731
+```
+
+> When [RSI13_oversold + ADX_strong_trend + EMA50_below_EMA100] occurs, price historically reacts BULLISH 67.1% of the time with an average move of 2.02 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #33 — `RSI14_oversold + STO_K_21_oversold + ADX_strong_trend`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5956** |
+| Match Count | 65 |
+| Dominant Direction | BULLISH |
+| Direction % | 72.3% |
+| Mag ATR Mean | 2.1465 |
+| Mag ATR Std | 1.2023 |
+| Mag CV | 0.5601 |
+| Timing (candles) | 3.45 |
+| Persistence | 3.48 |
+| Frequency | 1.117% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     30 samples  bullish   76.7%  mag_atr=2.6529
+    val       19 samples  bullish   68.4%  mag_atr=1.8781
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
+```
+
+> When [RSI14_oversold + STO_K_21_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 72.3% of the time with an average move of 2.15 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #34 — `RSI13_oversold + STO_K_21_oversold + ADX_strong_trend`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5930** |
+| Match Count | 66 |
+| Dominant Direction | BULLISH |
+| Direction % | 71.2% |
+| Mag ATR Mean | 2.1306 |
+| Mag ATR Std | 1.2 |
+| Mag CV | 0.5632 |
+| Timing (candles) | 3.45 |
+| Persistence | 3.47 |
+| Frequency | 1.1342% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     30 samples  bullish   76.7%  mag_atr=2.6529
+    val       19 samples  bullish   68.4%  mag_atr=1.8781
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
+```
+
+> When [RSI13_oversold + STO_K_21_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 71.2% of the time with an average move of 2.13 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #35 — `EMA21_below_EMA50 + CCI14_overbought + squeeze_active`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5921** |
+| Match Count | 71 |
+| Dominant Direction | BEARISH |
+| Direction % | 66.2% |
+| Mag ATR Mean | 1.8965 |
+| Mag ATR Std | 1.0196 |
+| Mag CV | 0.5376 |
+| Timing (candles) | 3.79 |
+| Persistence | 3.08 |
+| Frequency | 1.2201% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     42 samples  bearish   64.3%  mag_atr=1.7766
+    val       16 samples  bearish   75.0%  mag_atr=2.0498
+    oos       13 samples  bearish   61.5%  mag_atr=2.0952
+```
+
+> When [EMA21_below_EMA50 + CCI14_overbought + squeeze_active] occurs, price historically reacts BEARISH 66.2% of the time with an average move of 1.90 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #36 — `RSI7_oversold + RSI13_oversold + ADX_strong_trend`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5911** |
+| Match Count | 77 |
+| Dominant Direction | BULLISH |
+| Direction % | 66.2% |
+| Mag ATR Mean | 1.9825 |
+| Mag ATR Std | 1.1717 |
+| Mag CV | 0.591 |
+| Timing (candles) | 3.34 |
+| Persistence | 3.36 |
+| Frequency | 1.3233% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     41 samples  bullish   65.8%  mag_atr=2.2397
+    val       19 samples  bullish   68.4%  mag_atr=1.8669
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
+```
+
+> When [RSI7_oversold + RSI13_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 66.2% of the time with an average move of 1.98 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #37 — `RSI7_oversold + RSI14_oversold + ADX_strong_trend`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5907** |
+| Match Count | 74 |
+| Dominant Direction | BULLISH |
+| Direction % | 67.6% |
+| Mag ATR Mean | 2.0162 |
+| Mag ATR Std | 1.1826 |
+| Mag CV | 0.5865 |
+| Timing (candles) | 3.34 |
+| Persistence | 3.36 |
+| Frequency | 1.2717% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     40 samples  bullish   65.0%  mag_atr=2.263
+    val       18 samples  bullish   72.2%  mag_atr=1.9126
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
+```
+
+> When [RSI7_oversold + RSI14_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 67.6% of the time with an average move of 2.02 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #38 — `STO_K_14_oversold + ADX_strong_trend + EMA50_below_EMA100`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5891** |
+| Match Count | 71 |
+| Dominant Direction | BULLISH |
+| Direction % | 70.4% |
+| Mag ATR Mean | 2.1465 |
+| Mag ATR Std | 1.3063 |
+| Mag CV | 0.6086 |
+| Timing (candles) | 3.61 |
+| Persistence | 3.49 |
+| Frequency | 1.2201% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     34 samples  bullish   73.5%  mag_atr=2.6519
+    val       22 samples  bullish   68.2%  mag_atr=1.8157
+    oos       15 samples  bullish   66.7%  mag_atr=1.4859
+```
+
+> When [STO_K_14_oversold + ADX_strong_trend + EMA50_below_EMA100] occurs, price historically reacts BULLISH 70.4% of the time with an average move of 2.15 ATR (high variance) and stable repetition across validation splits.
+
+---
+
+## #39 — `RSI14_oversold + STO_K_14_oversold + ADX_strong_trend`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5888** |
+| Match Count | 59 |
+| Dominant Direction | BULLISH |
+| Direction % | 74.6% |
+| Mag ATR Mean | 2.1654 |
+| Mag ATR Std | 1.2341 |
+| Mag CV | 0.5699 |
+| Timing (candles) | 3.51 |
+| Persistence | 3.51 |
+| Frequency | 1.0139% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     27 samples  bullish   77.8%  mag_atr=2.7282
+    val       16 samples  bullish   75.0%  mag_atr=1.8654
+    oos       16 samples  bullish   68.8%  mag_atr=1.5158
+```
+
+> When [RSI14_oversold + STO_K_14_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 74.6% of the time with an average move of 2.17 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #40 — `RSI13_oversold + STO_K_14_oversold + ADX_strong_trend`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5856** |
+| Match Count | 60 |
+| Dominant Direction | BULLISH |
+| Direction % | 73.3% |
+| Mag ATR Mean | 2.1476 |
+| Mag ATR Std | 1.2314 |
+| Mag CV | 0.5734 |
+| Timing (candles) | 3.52 |
+| Persistence | 3.5 |
+| Frequency | 1.0311% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     27 samples  bullish   77.8%  mag_atr=2.7282
+    val       16 samples  bullish   75.0%  mag_atr=1.8654
+    oos       17 samples  bullish   64.7%  mag_atr=1.4912
+```
+
+> When [RSI13_oversold + STO_K_14_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 73.3% of the time with an average move of 2.15 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #41 — `RSI7_oversold + STO_K_14_oversold + ADX_strong_trend`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5845** |
+| Match Count | 67 |
+| Dominant Direction | BULLISH |
+| Direction % | 70.2% |
+| Mag ATR Mean | 2.0491 |
+| Mag ATR Std | 1.2104 |
+| Mag CV | 0.5907 |
+| Timing (candles) | 3.52 |
+| Persistence | 3.39 |
+| Frequency | 1.1514% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     31 samples  bullish   77.4%  mag_atr=2.5961
+    val       15 samples  bullish   73.3%  mag_atr=1.851
+    oos       21 samples  bullish   57.1%  mag_atr=1.3833
+```
+
+> When [RSI7_oversold + STO_K_14_oversold + ADX_strong_trend] occurs, price historically reacts BULLISH 70.2% of the time with an average move of 2.05 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #42 — `RSI7_overbought + ATR7_above_ATR13 + doji`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5829** |
+| Match Count | 60 |
+| Dominant Direction | BULLISH |
+| Direction % | 65.0% |
+| Mag ATR Mean | 2.3164 |
+| Mag ATR Std | 1.0835 |
+| Mag CV | 0.4678 |
+| Timing (candles) | 4.08 |
+| Persistence | 3.1 |
+| Frequency | 1.0311% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     34 samples  bullish   64.7%  mag_atr=2.2573
+    val       15 samples  bullish   66.7%  mag_atr=2.5502
+    oos       11 samples  bullish   63.6%  mag_atr=2.1748
+```
+
+> When [RSI7_overbought + ATR7_above_ATR13 + doji] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.32 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #43 — `RSI7_oversold + EMA21_below_EMA50 + close_above_EMA200`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5772** |
+| Match Count | 59 |
+| Dominant Direction | BULLISH |
+| Direction % | 69.5% |
+| Mag ATR Mean | 1.7124 |
+| Mag ATR Std | 0.934 |
+| Mag CV | 0.5454 |
+| Timing (candles) | 3.97 |
+| Persistence | 3.66 |
+| Frequency | 1.0139% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     36 samples  bullish   72.2%  mag_atr=1.6953
+    val       12 samples  bullish   75.0%  mag_atr=1.7326
+    oos       11 samples  bullish   54.5%  mag_atr=1.7462
+```
+
+> When [RSI7_oversold + EMA21_below_EMA50 + close_above_EMA200] occurs, price historically reacts BULLISH 69.5% of the time with an average move of 1.71 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #44 — `STO_K_14_oversold + EMA50_above_EMA200 + MACD_9_21_bull_cross`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5748** |
+| Match Count | 42 |
+| Dominant Direction | BULLISH |
+| Direction % | 69.0% |
+| Mag ATR Mean | 1.6854 |
+| Mag ATR Std | 0.6913 |
+| Mag CV | 0.4102 |
+| Timing (candles) | 3.83 |
+| Persistence | 3.79 |
+| Frequency | 0.7218% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     22 samples  bullish   77.3%  mag_atr=1.9678
+    val       10 samples  bullish   60.0%  mag_atr=1.3849
+    oos       10 samples  bullish   60.0%  mag_atr=1.3647
+```
+
+> When [STO_K_14_oversold + EMA50_above_EMA200 + MACD_9_21_bull_cross] occurs, price historically reacts BULLISH 69.0% of the time with an average move of 1.69 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #45 — `RSI14_oversold + ADX_strong_trend + EMA50_below_EMA200`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5708** |
+| Match Count | 68 |
+| Dominant Direction | BULLISH |
+| Direction % | 66.2% |
+| Mag ATR Mean | 2.0309 |
+| Mag ATR Std | 1.2139 |
+| Mag CV | 0.5977 |
+| Timing (candles) | 3.38 |
+| Persistence | 3.35 |
+| Frequency | 1.1686% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     37 samples  bullish   67.6%  mag_atr=2.2481
+    val       18 samples  bullish   66.7%  mag_atr=1.9149
+    oos       13 samples  bullish   61.5%  mag_atr=1.5731
+```
+
+> When [RSI14_oversold + ADX_strong_trend + EMA50_below_EMA200] occurs, price historically reacts BULLISH 66.2% of the time with an average move of 2.03 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #46 — `RSI13_oversold + ADX_strong_trend + EMA50_below_EMA200`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5688** |
+| Match Count | 69 |
+| Dominant Direction | BULLISH |
+| Direction % | 65.2% |
+| Mag ATR Mean | 2.0166 |
+| Mag ATR Std | 1.2109 |
+| Mag CV | 0.6005 |
+| Timing (candles) | 3.35 |
+| Persistence | 3.33 |
+| Frequency | 1.1858% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     37 samples  bullish   67.6%  mag_atr=2.2481
+    val       19 samples  bullish   63.2%  mag_atr=1.8691
+    oos       13 samples  bullish   61.5%  mag_atr=1.5731
+```
+
+> When [RSI13_oversold + ADX_strong_trend + EMA50_below_EMA200] occurs, price historically reacts BULLISH 65.2% of the time with an average move of 2.02 ATR (high variance) and stable repetition across validation splits.
+
+---
+
+## #47 — `close_above_BB_UPPER_20_2 + MACD_8_21_bear_cross + CCI21_overbought`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5656** |
+| Match Count | 60 |
+| Dominant Direction | BULLISH |
+| Direction % | 65.0% |
+| Mag ATR Mean | 2.2608 |
+| Mag ATR Std | 1.2138 |
+| Mag CV | 0.5369 |
+| Timing (candles) | 4.1 |
+| Persistence | 3.25 |
+| Frequency | 1.0311% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     32 samples  bullish   65.6%  mag_atr=2.1998
+    val       14 samples  bullish   64.3%  mag_atr=2.7623
+    oos       14 samples  bullish   64.3%  mag_atr=1.8986
+```
+
+> When [close_above_BB_UPPER_20_2 + MACD_8_21_bear_cross + CCI21_overbought] occurs, price historically reacts BULLISH 65.0% of the time with an average move of 2.26 ATR (moderate variance) and stable repetition across validation splits.
+
+---
+
+## #48 — `STO_K_14_oversold + ADX_strong_trend + EMA50_below_EMA200`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5603** |
+| Match Count | 67 |
+| Dominant Direction | BULLISH |
+| Direction % | 65.7% |
+| Mag ATR Mean | 2.1424 |
+| Mag ATR Std | 1.338 |
+| Mag CV | 0.6245 |
+| Timing (candles) | 3.72 |
+| Persistence | 3.22 |
+| Frequency | 1.1514% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     33 samples  bullish   63.6%  mag_atr=2.6036
+    val       19 samples  bullish   68.4%  mag_atr=1.8596
+    oos       15 samples  bullish   66.7%  mag_atr=1.4859
+```
+
+> When [STO_K_14_oversold + ADX_strong_trend + EMA50_below_EMA200] occurs, price historically reacts BULLISH 65.7% of the time with an average move of 2.14 ATR (high variance) and stable repetition across validation splits.
+
+---
+
+## #49 — `RSI7_oversold + EMA50_above_EMA200 + MACD_12_26_bull_cross`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5583** |
+| Match Count | 40 |
+| Dominant Direction | BULLISH |
+| Direction % | 72.5% |
+| Mag ATR Mean | 1.8086 |
+| Mag ATR Std | 0.6773 |
+| Mag CV | 0.3745 |
+| Timing (candles) | 4.17 |
+| Persistence | 3.73 |
+| Frequency | 0.6874% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     21 samples  bullish   71.4%  mag_atr=2.0784
+    val       10 samples  bullish   70.0%  mag_atr=1.4664
+    oos     [insufficient]
+```
+
+> When [RSI7_oversold + EMA50_above_EMA200 + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 72.5% of the time with an average move of 1.81 ATR (low variance) and stable repetition across validation splits.
+
+---
+
+## #50 — `STO_K_14_oversold + ADX_strong_trend + MACD_12_26_bull_cross`
+
+| Field | Value |
+|---|---|
+| Consistency Score | **0.5578** |
+| Match Count | 56 |
+| Dominant Direction | BULLISH |
+| Direction % | 69.6% |
+| Mag ATR Mean | 2.0648 |
+| Mag ATR Std | 1.2395 |
+| Mag CV | 0.6003 |
+| Timing (candles) | 3.59 |
+| Persistence | 3.59 |
+| Frequency | 0.9624% |
+| Overfit Status | STABLE |
+
+**Split Validation:**
+```
+    train     19 samples  bullish   68.4%  mag_atr=2.8328
+    val       22 samples  bullish   68.2%  mag_atr=1.8157
+    oos       15 samples  bullish   73.3%  mag_atr=1.4572
+```
+
+> When [STO_K_14_oversold + ADX_strong_trend + MACD_12_26_bull_cross] occurs, price historically reacts BULLISH 69.6% of the time with an average move of 2.06 ATR (high variance) and stable repetition across validation splits.
 
 ---
