@@ -72,5 +72,8 @@
   "min_freq_pct": 0.05,
   "max_freq_pct": 5.0,
 
-  "dir_grace": 0.80
+  "dir_grace": 0.80,
+  "memory_spill_threshold_percent": 30,
+  "storage_backend": "sqlite",
+  "storage_path": "./spool.db"
 }

@@ -14,13 +14,16 @@ main reason the project uses safeguards such as max_depth and max_combinations.
 """
 
 from itertools import combinations
+from typing import Any
+
+from .queue_storage import HybridQueue, WorkQueue
 
 # A condition is just its name string — evaluation logic lives in condition_engine.py
 ConditionName  = str
 ConditionCombo = tuple[ConditionName, ...]
 
 
-def build_search_space(payload: dict) -> list[ConditionCombo]:
+def build_search_space(payload: dict, queue: WorkQueue | None = None) -> Any:
     """Generate every unique condition combination up to the configured depth.
 
     Purpose:
@@ -53,17 +56,29 @@ def build_search_space(payload: dict) -> list[ConditionCombo]:
     max_depth = payload.get("max_depth", 3)
     max_combinations = payload.get("max_combinations")
 
-    space: list[ConditionCombo] = []
+    if queue is None:
+        queue = HybridQueue(
+            memory_monitor=None,
+            storage_path=payload.get("storage_path", "./spool.db"),
+            storage_backend=payload.get("storage_backend", "sqlite"),
+        )
+        queue.memory_monitor.threshold = payload.get("memory_spill_threshold_percent", 80)
+
+    stats: dict[str, Any] = {"total": 0, "by_depth": {}}
     for depth in range(1, max_depth + 1):
         # Each depth contributes C(n, depth) possible combinations.
         # The overall search-space size is the sum of all these terms.
         for combo in combinations(names, depth):
-            if max_combinations is not None and len(space) >= max_combinations:
+            if max_combinations is not None and stats["total"] >= max_combinations:
                 # The hard cap prevents an explosion in runtime and memory.
-                return space
-            space.append(combo)
+                queue.stats = stats
+                return queue
+            queue.put(combo)
+            stats["total"] += 1
+            stats["by_depth"][depth] = stats["by_depth"].get(depth, 0) + 1
 
-    return space
+    queue.stats = stats
+    return queue
 
 
 def describe_combo(combo: ConditionCombo) -> str:
@@ -71,8 +86,15 @@ def describe_combo(combo: ConditionCombo) -> str:
     return " + ".join(combo)
 
 
-def combo_stats(space: list[ConditionCombo]) -> dict:
+def combo_stats(space: Any) -> dict:
     """Summarise how many combinations were generated at each depth."""
+    if hasattr(space, "stats") and isinstance(getattr(space, "stats"), dict):
+        stats = dict(space.stats)
+        return {
+            "total": stats.get("total", 0),
+            "by_depth": dict(sorted(stats.get("by_depth", {}).items())),
+        }
+
     from collections import Counter
     depth_counts = Counter(len(c) for c in space)
     return {

@@ -15,6 +15,7 @@ import operator as _op
 import pandas as pd
 from typing import Any
 
+from .queue_storage import WorkQueue
 from .search_space import ConditionCombo, describe_combo
 
 # ── Operator map ────────────────────────────────────────────────────────────
@@ -126,9 +127,23 @@ def apply_combo(
     return mask
 
 
+def _iter_combos(combos: list[ConditionCombo] | WorkQueue) -> Any:
+    if isinstance(combos, WorkQueue):
+        while True:
+            batch = combos.get_many(1000)
+            if not batch:
+                break
+            for combo in batch:
+                yield combo
+        return
+
+    for combo in combos:
+        yield combo
+
+
 def scan_all_combos(
     df: pd.DataFrame,
-    combos: list[ConditionCombo],
+    combos: list[ConditionCombo] | WorkQueue,
     payload: dict,
 ) -> list[dict]:
     """Evaluate every generated combo across the full dataframe.
@@ -166,10 +181,10 @@ def scan_all_combos(
     """
     evaluators  = _build_evaluators(payload)
     min_samples = payload.get("min_samples", 30)
-    total       = len(combos)
+    total       = combos.size() if hasattr(combos, "size") else len(combos)
     results     = []
 
-    for i, combo in enumerate(combos, 1):
+    for i, combo in enumerate(_iter_combos(combos), 1):
         if i % 1000 == 0 or i == total:
             pct = i / total * 100
             print(f"\r  [{i:>6}/{total}] {pct:5.1f}%  candidates so far: {len(results)}", end="", flush=True)

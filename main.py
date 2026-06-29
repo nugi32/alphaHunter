@@ -33,6 +33,7 @@ from analysis import (
     validate_overfit,
     rank_candidates,
     generate_report,
+    HybridQueue,
 )
 from analysis.consistency import diagnose_thresholds
 
@@ -123,13 +124,21 @@ def run_pipeline(
 
     # Step 4+5: Generate the condition combinations and scan them against the
     # dataframe. This is the brute-force engine of the project.
+    queue = HybridQueue(
+        memory_monitor=None,
+        storage_path=payload.get("storage_path", "./spool.db"),
+        storage_backend=payload.get("storage_backend", "sqlite"),
+    )
+    queue.memory_monitor.threshold = payload.get("memory_spill_threshold_percent", 80)
+
     with timed_spinner("Building search space"):
-        combos = build_search_space(payload)
+        combos = build_search_space(payload, queue=queue)
     stats = combo_stats(combos)
     print(f"  Combinations: {stats['total']:,}  |  by depth: {stats['by_depth']}")
 
     print(f"\nStep 5 — Scanning {stats['total']:,} combos …")
     matches = scan_all_combos(df, combos, payload)
+    queue.close()
     print(f"  Candidates after min_samples: {len(matches):,}\n")
 
     if not matches:

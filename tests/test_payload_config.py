@@ -22,3 +22,7 @@ def test_payload_includes_richer_signal_conditions():
         if condition["name"] == "RSI21_oversold"
     )
     assert rsi21_condition["col"] == "RSI_21"
+
+    assert payload["memory_spill_threshold_percent"] == 80
+    assert payload["storage_backend"] == "sqlite"
+    assert payload["storage_path"] == "./spool.db"
