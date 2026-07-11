@@ -10,7 +10,7 @@ def apply(df):
     Uses 100-period lookback to find significant swings.
     """
     # Find swing highs and lows over lookback period
-    lookback = 100
+    lookback = 55
     
     high_100 = df["High"].rolling(lookback).max()
     low_100 = df["Low"].rolling(lookback).min()

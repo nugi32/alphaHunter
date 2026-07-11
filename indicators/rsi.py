@@ -25,7 +25,7 @@ def apply(df):
     gain = delta.where(delta > 0, 0)
     loss = -delta.where(delta < 0, 0)
 
-    for p in [7, 13, 14, 21]:
+    for p in [7, 13, 14, 21, 34, 50, 55, 89, 100, 144, 200, 233]:
         # Use Wilder's smoothing instead of simple moving average
         avg_gain = _wilders_moving_average(gain, p)
         avg_loss = _wilders_moving_average(loss, p)

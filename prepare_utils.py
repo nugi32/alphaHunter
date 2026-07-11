@@ -28,7 +28,6 @@ from indicators import (
 from patterns import (
     candle_patterns,
     compression,
-    market_structure,
     volatility_regime,
 )
 
@@ -57,7 +56,6 @@ pattern_modules = [
     candle_patterns,
     compression,
     volatility_regime,
-    market_structure,
 ]
 
 

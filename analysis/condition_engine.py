@@ -28,6 +28,20 @@ _OPS: dict = {
     "!=": _op.ne,
 }
 
+_ARITH_OPS: dict = {
+    "+":  _op.add,
+    "-":  _op.sub,
+    "*":  _op.mul,
+    "/":  _op.truediv,
+}
+
+
+def _resolve_operand(df: pd.DataFrame, value: Any) -> pd.Series | None:
+    """Resolve a column name or a literal value into a pandas Series."""
+    if isinstance(value, str):
+        return df[value] if value in df.columns else None
+    return pd.Series(value, index=df.index)
+
 
 # ── Build a lookup: condition name → callable(df) → bool Series ─────────────
 
@@ -58,33 +72,49 @@ def _build_evaluators(payload: dict) -> dict[str, Any]:
         name = cdef["name"]
         col  = cdef["col"]
         op   = cdef["op"]
-        fn   = _OPS[op]
         ctype = cdef.get("type", "threshold")
 
         if ctype == "threshold":
+            if op not in _OPS:
+                raise ValueError(f"Unsupported threshold operator {op!r} in '{name}'")
+            fn = _OPS[op]
             val = cdef["val"]
             evaluators[name] = lambda df, c=col, f=fn, v=val: (
                 pd.Series(False, index=df.index)
-                if c not in df.columns
-                else f(df[c], v)
+                if _resolve_operand(df, c) is None
+                else f(_resolve_operand(df, c), v)
             )
 
         elif ctype == "cross":
+            if op not in _OPS:
+                raise ValueError(f"Unsupported cross operator {op!r} in '{name}'")
+            fn = _OPS[op]
             col2 = cdef["col2"]
             evaluators[name] = lambda df, c=col, f=fn, c2=col2: (
                 pd.Series(False, index=df.index)
-                if c not in df.columns or c2 not in df.columns
-                else f(df[c], df[c2])
+                if _resolve_operand(df, c) is None or _resolve_operand(df, c2) is None
+                else f(_resolve_operand(df, c), _resolve_operand(df, c2))
             )
 
         elif ctype == "ratio":
             col2   = cdef["col2"]
             factor = cdef.get("factor", 1.0)
-            evaluators[name] = lambda df, c=col, f=fn, c2=col2, fc=factor: (
-                pd.Series(False, index=df.index)
-                if c not in df.columns or c2 not in df.columns
-                else f(df[c], df[c2] * fc)
-            )
+            if op in _OPS:
+                fn = _OPS[op]
+                evaluators[name] = lambda df, c=col, f=fn, c2=col2, fc=factor: (
+                    pd.Series(False, index=df.index)
+                    if _resolve_operand(df, c) is None or _resolve_operand(df, c2) is None
+                    else f(_resolve_operand(df, c), _resolve_operand(df, c2) * fc)
+                )
+            elif op in _ARITH_OPS:
+                fn = _ARITH_OPS[op]
+                evaluators[name] = lambda df, c=col, f=fn, c2=col2, fc=factor: (
+                    pd.Series(False, index=df.index)
+                    if _resolve_operand(df, c) is None or _resolve_operand(df, c2) is None
+                    else _op.lt(f(_resolve_operand(df, c), _resolve_operand(df, c2)), fc)
+                )
+            else:
+                raise ValueError(f"Unsupported ratio operator {op!r} in '{name}'")
 
         else:
             raise ValueError(f"Unknown condition type: {ctype!r} in '{name}'")

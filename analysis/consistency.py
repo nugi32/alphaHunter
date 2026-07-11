@@ -50,9 +50,20 @@ def diagnose_thresholds(
     counts = [m["valid_count"] for m in enriched]
 
     def _pct(label, arr):
-        a = np.array(arr)
+        a = np.array(arr, dtype=float)
 
         print(f"\n  {label} (n={len(a)})")
+
+        if len(a) == 0:
+            print("    p10  = n/a")
+            print("    p25  = n/a")
+            print("    p50  = n/a")
+            print("    p75  = n/a")
+            print("    p90  = n/a")
+            print("    p95  = n/a")
+            print("    p99  = n/a")
+            print("    max=n/a min=n/a")
+            return
 
         for p in [10, 25, 50, 75, 90, 95, 99]:
             print(f"    p{p:<3} = {np.percentile(a, p):.4f}")
