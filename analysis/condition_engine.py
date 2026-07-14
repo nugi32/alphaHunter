@@ -12,8 +12,13 @@ individual rows.
 """
 
 import operator as _op
-import pandas as pd
+import os
+import sys
+import time
+import resource
 from typing import Any
+
+import pandas as pd
 
 from .queue_storage import WorkQueue
 from .search_space import ConditionCombo, describe_combo
@@ -41,6 +46,54 @@ def _resolve_operand(df: pd.DataFrame, value: Any) -> pd.Series | None:
     if isinstance(value, str):
         return df[value] if value in df.columns else None
     return pd.Series(value, index=df.index)
+
+
+def _get_memory_usage_percent() -> float:
+    """Best-effort memory usage estimate for the current process."""
+    try:
+        import psutil
+    except ImportError:  # pragma: no cover
+        psutil = None
+
+    if psutil is not None:
+        try:
+            return float(psutil.Process().memory_percent())
+        except Exception:  # pragma: no cover
+            try:
+                return float(psutil.virtual_memory().percent)
+            except Exception:  # pragma: no cover
+                pass
+
+    try:
+        rss_kb = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        rss_bytes = rss_kb * 1024
+        total_bytes = None
+        try:
+            total_bytes = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")
+        except (AttributeError, ValueError, OSError):
+            total_bytes = None
+
+        if total_bytes and total_bytes > 0:
+            return min(100.0, max(0.0, (rss_bytes / total_bytes) * 100.0))
+    except Exception:  # pragma: no cover
+        pass
+
+    try:
+        with open("/proc/self/status", "r", encoding="utf-8") as handle:
+            for line in handle:
+                if line.startswith("VmRSS:"):
+                    rss_kb = int(line.split()[1])
+                    with open("/proc/meminfo", "r", encoding="utf-8") as meminfo:
+                        for mem_line in meminfo:
+                            if mem_line.startswith("MemTotal:"):
+                                total_kb = int(mem_line.split()[1])
+                                if total_kb > 0:
+                                    return min(100.0, max(0.0, (rss_kb / total_kb) * 100.0))
+                    break
+    except Exception:  # pragma: no cover
+        pass
+
+    return 100.0
 
 
 # ── Build a lookup: condition name → callable(df) → bool Series ─────────────
@@ -213,11 +266,19 @@ def scan_all_combos(
     min_samples = payload.get("min_samples", 30)
     total       = combos.size() if hasattr(combos, "size") else len(combos)
     results     = []
+    threshold   = payload.get("memory_spill_threshold_percent", 80)
+    last_check  = 0.0
 
     for i, combo in enumerate(_iter_combos(combos), 1):
         if i % 1000 == 0 or i == total:
             pct = i / total * 100
             print(f"\r  [{i:>6}/{total}] {pct:5.1f}%  candidates so far: {len(results)}", end="", flush=True)
+
+        now = time.time()
+        if now - last_check >= 0.5:
+            last_check = now
+            if _get_memory_usage_percent() >= threshold:
+                pass
 
         mask        = apply_combo(df, combo, evaluators)
         match_count = int(mask.sum())

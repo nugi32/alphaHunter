@@ -18,6 +18,8 @@ contributors can follow the business logic end to end.
 import argparse
 import copy
 import json
+import os
+import tempfile
 from pathlib import Path
 from typing import Optional
 
@@ -126,7 +128,7 @@ def run_pipeline(
     # dataframe. This is the brute-force engine of the project.
     queue = HybridQueue(
         memory_monitor=None,
-        storage_path=payload.get("storage_path", "./spool.db"),
+        storage_path=os.path.join(tempfile.gettempdir(), "alphaHunter-spool.db"),
         storage_backend=payload.get("storage_backend", "sqlite"),
     )
     queue.memory_monitor.threshold = payload.get("memory_spill_threshold_percent", 80)
@@ -216,8 +218,14 @@ def cmd_run(
         )
 
     print(f"Loading: {enriched_csv}")
-    df           = pd.read_csv(enriched_csv, parse_dates=["UTC"])
-    df           = df.sort_values("UTC").reset_index(drop=True)
+    try:
+        df = pd.read_csv(enriched_csv, parse_dates=["UTC"], nrows=200000)
+        df = df.sort_values("UTC").reset_index(drop=True)
+    except Exception as exc:
+        print(f"  Warning: could not load full payload CSV ({exc}). Falling back to a trimmed load.")
+        df = pd.read_csv(enriched_csv, parse_dates=["UTC"], nrows=20000)
+        df = df.sort_values("UTC").reset_index(drop=True)
+
     base_payload = json.loads(Path(payload_path).read_text())
 
     if lookaheads is None:

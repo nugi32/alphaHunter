@@ -95,7 +95,7 @@
   { "name": "Close_below_SMA200", "type": "cross", "col": "Close", "op": "<", "col2": "SMA_200" }
 ],
 
-  "max_depth": 2,
+  "max_depth": 5,
   "max_combinations": 200000000000000000000000000000000000000000000000000000000000000000000000000000000000000,
   "min_samples": 50,
   "lookahead": 3,

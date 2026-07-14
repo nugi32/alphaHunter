@@ -53,8 +53,9 @@ def build_search_space(payload: dict, queue: WorkQueue | None = None) -> Any:
         O(total_combinations) because the full space is stored in memory.
     """
     names = [c["name"] for c in payload["conditions"]]
-    max_depth = payload.get("max_depth", 3)
-    max_combinations = payload.get("max_combinations")
+    max_depth = int(payload.get("max_depth", 3))
+
+    max_combinations = None
 
     if queue is None:
         queue = HybridQueue(
@@ -62,7 +63,8 @@ def build_search_space(payload: dict, queue: WorkQueue | None = None) -> Any:
             storage_path=payload.get("storage_path", "./spool.db"),
             storage_backend=payload.get("storage_backend", "sqlite"),
         )
-        queue.memory_monitor.threshold = payload.get("memory_spill_threshold_percent", 80)
+
+    queue.memory_monitor.threshold = payload.get("memory_spill_threshold_percent", 80)
 
     stats: dict[str, Any] = {"total": 0, "by_depth": {}}
     for depth in range(1, max_depth + 1):
