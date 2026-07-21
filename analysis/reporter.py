@@ -8,6 +8,19 @@ making the raw statistics understandable to a human operator.
 from pathlib import Path
 import pandas as pd
 
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
+def _resolve_output_dir(output_dir: str | Path) -> Path:
+    if isinstance(output_dir, Path):
+        path = output_dir
+    else:
+        path = Path(output_dir)
+
+    if path.is_absolute():
+        return path
+    return (PROJECT_ROOT / path).resolve()
+
 
 def _split_summary(split_results: dict) -> str:
     """Format the per-split validation results as a readable block."""
@@ -76,7 +89,8 @@ def generate_report(
         - Persistence
         - Overfit Status
     """
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    output_dir = _resolve_output_dir(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
     results = ranked[:top_n]
 
     # Terminal summary.
@@ -95,7 +109,7 @@ def generate_report(
         print(f"       {_interpret(c)}\n")
 
     # Markdown report.
-    md_path = Path(output_dir) / "report.md"
+    md_path = output_dir / "report.md"
     lines = [
         "# Market Condition Analysis Report\n",
         f"**Lookahead:** {payload.get('lookahead')} candles  ",
@@ -130,7 +144,7 @@ def generate_report(
     print(f"✓ Report saved: {md_path}")
 
     # CSV summary.
-    csv_path = Path(output_dir) / "final_results.csv"
+    csv_path = output_dir / "final_results.csv"
     skip = {"reactions", "match_index", "split_results"}
     pd.DataFrame([
         {k: v for k, v in c.items() if k not in skip}

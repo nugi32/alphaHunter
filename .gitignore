@@ -50,6 +50,7 @@ data/XAUUSD/*.csv
 
 # Logs
 *.log
+*.db
 
 # mypy / lint cache
 .mypy_cache/

@@ -6,10 +6,27 @@ from prepare_utils import prepare
 from loader import load_tf
 from timing_utils import timed_spinner
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+
+
+def resolve_project_path(path: Optional[str] | Path) -> Path:
+    if path is None:
+        return PROJECT_ROOT
+
+    path_obj = Path(path)
+    if path_obj.is_absolute():
+        return path_obj
+    if path_obj.exists():
+        return path_obj.resolve()
+    return (PROJECT_ROOT / path_obj).resolve()
+
+
 def save_payload(timeframe: str, output_path: Optional[str] = None, limit: Optional[int] = None):
     """Load timeframe data, enrich with indicators and patterns, and save to CSV."""
     if output_path is None:
         output_path = f"payload_{timeframe}.csv"
+
+    output_path = resolve_project_path(output_path)
 
     with timed_spinner(f"Loading timeframe data: {timeframe}"):
         df = load_tf(timeframe, limit=limit)
@@ -17,10 +34,10 @@ def save_payload(timeframe: str, output_path: Optional[str] = None, limit: Optio
     with timed_spinner("Applying indicators and patterns"):
         df = prepare(df)
 
-    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False, encoding="utf-8")
     print(f"Payload saved: {output_path} ({len(df)} rows)")
-    return output_path
+    return str(output_path)
 
 
 def main():

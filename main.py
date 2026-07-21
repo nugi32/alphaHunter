@@ -28,6 +28,26 @@ import pandas as pd
 from prepare_utils import prepare
 from loader import load_tf
 from timing_utils import timed_spinner
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+
+
+def resolve_project_path(path: Optional[str] | Path, *, prefer_cwd: bool = False) -> Path:
+    """Resolve a path relative to the repo root unless a matching cwd path exists."""
+    if path is None:
+        return PROJECT_ROOT
+
+    path_obj = Path(path)
+    if path_obj.is_absolute():
+        return path_obj
+
+    if prefer_cwd and path_obj.exists():
+        return path_obj.resolve()
+
+    repo_candidate = (PROJECT_ROOT / path_obj).resolve()
+    if path_obj.exists():
+        return path_obj.resolve()
+    return repo_candidate
 from analysis import (
     build_search_space, combo_stats, scan_all_combos,
     measure_reactions,
@@ -75,16 +95,18 @@ def cmd_prepare(
     if output_path is None:
         output_path = f"payload_{timeframe}.csv"
 
+    output_path = resolve_project_path(output_path)
+
     with timed_spinner(f"Loading timeframe data: {timeframe}"):
         df = load_tf(timeframe, limit=limit)
 
     with timed_spinner("Applying indicators and patterns"):
         df = prepare(df)
 
-    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False, encoding="utf-8")
     print(f"  Payload saved: {output_path} ({len(df):,} rows)")
-    return output_path
+    return str(output_path)
 
 
 # ── Steps 4–11: Analysis pipeline ────────────────────────────────────────────
@@ -119,6 +141,7 @@ def run_pipeline(
     """
     lookahead = payload.get("lookahead", 5)
     depth     = payload.get("max_depth", 3)
+    output_dir = str(resolve_project_path(output_dir))
 
     print(f"\n{'='*60}")
     print(f"  lookahead={lookahead}  |  max_depth={depth}  |  output → {output_dir}")
@@ -128,7 +151,7 @@ def run_pipeline(
     # dataframe. This is the brute-force engine of the project.
     queue = HybridQueue(
         memory_monitor=None,
-        storage_path=os.path.join(tempfile.gettempdir(), "alphaHunter-spool.db"),
+        storage_path=payload.get("storage_path", "./spool.db"),
         storage_backend=payload.get("storage_backend", "sqlite"),
     )
     queue.memory_monitor.threshold = payload.get("memory_spill_threshold_percent", 80)
@@ -208,10 +231,11 @@ def cmd_run(
     Side effects:
         Reads the enriched payload CSV and writes sweep summaries to disk.
     """
-    if enriched_csv is None:
-        enriched_csv = f"payload_{timeframe}.csv"
+    enriched_csv = resolve_project_path(enriched_csv or f"payload_{timeframe}.csv")
+    payload_path = resolve_project_path(payload_path)
+    output_root = resolve_project_path(output_root)
 
-    if not Path(enriched_csv).exists():
+    if not enriched_csv.exists():
         raise FileNotFoundError(
             f"Enriched CSV not found: {enriched_csv}\n"
             f"Run 'prepare' first:  python main.py prepare --tf {timeframe}"
@@ -226,7 +250,7 @@ def cmd_run(
         df = pd.read_csv(enriched_csv, parse_dates=["UTC"], nrows=20000)
         df = df.sort_values("UTC").reset_index(drop=True)
 
-    base_payload = json.loads(Path(payload_path).read_text())
+    base_payload = json.loads(payload_path.read_text())
 
     if lookaheads is None:
         lookaheads = [base_payload.get("lookahead", 5)]
@@ -236,8 +260,8 @@ def cmd_run(
     for la in lookaheads:
         payload    = copy.deepcopy(base_payload)
         payload["lookahead"] = la
-        out_dir    = f"{output_root}/la{la}"
-        ranked     = run_pipeline(df, payload, output_dir=out_dir)
+        out_dir    = output_root / f"la{la}"
+        ranked     = run_pipeline(df, payload, output_dir=str(out_dir))
         summary.append({
             "lookahead":        la,
             "max_depth":        payload.get("max_depth", 3),
@@ -258,9 +282,9 @@ def cmd_run(
                 f"valid={row['valid_conditions']:<4}  "
                 f"top={row['top_score']}  {row['top_condition'] or '—'}"
             )
-        Path(output_root).mkdir(parents=True, exist_ok=True)
-        pd.DataFrame(summary).to_csv(f"{output_root}/sweep_summary.csv", index=False)
-        print(f"\n✓ Sweep summary → {output_root}/sweep_summary.csv")
+        output_root.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame(summary).to_csv(output_root / "sweep_summary.csv", index=False)
+        print(f"\n✓ Sweep summary → {output_root / 'sweep_summary.csv'}")
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────────

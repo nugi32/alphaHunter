@@ -12,9 +12,22 @@ import threading
 import time
 import resource
 from collections import deque
+from pathlib import Path
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
+def _resolve_storage_path(storage_path: Optional[str]) -> str:
+    if not storage_path:
+        return str(PROJECT_ROOT / "spool.db")
+
+    path = Path(storage_path).expanduser()
+    if path.is_absolute():
+        return str(path)
+    return str((PROJECT_ROOT / path).resolve())
 
 
 class WorkQueue:
@@ -290,7 +303,7 @@ class HybridQueue(WorkQueue):
         self.memory_monitor = memory_monitor or MemoryMonitor()
         self.storage_backend = (storage_backend or "sqlite").lower()
         if storage_path:
-            self.storage_path = storage_path
+            self.storage_path = _resolve_storage_path(storage_path)
         else:
             temp_dir = tempfile.gettempdir()
             self.storage_path = os.path.join(temp_dir, "alphaHunter-spool.db")
@@ -300,23 +313,30 @@ class HybridQueue(WorkQueue):
         if self.storage_backend == "sqlite":
             try:
                 self.disk_queue = DiskQueue(self.storage_path)
+                # Prefer the disk backend immediately once it is configured so the
+                # SQLite file grows instead of staying empty while the process uses
+                # RAM and swap.
+                self._spill_active = True
             except sqlite3.Error as exc:
                 logger.warning("[QUEUE] Falling back to in-memory queue because disk backend failed: %s", exc)
                 self.disk_queue = None
-                self._spill_active = True
+                self._spill_active = False
         else:
             raise ValueError(f"Unsupported storage backend: {self.storage_backend}")
 
     def _update_spill_state(self) -> None:
+        if self.disk_queue is None:
+            with self._lock:
+                self._spill_active = False
+            return
+
         should_spill = self.memory_monitor.should_spill()
         with self._lock:
+            if self._spill_active:
+                return
             if should_spill or self.ram_queue.size() >= self._MAX_RAM_ITEMS:
-                if not self._spill_active:
-                    self._spill_active = True
-                    logger.info("[MEMORY] Spill-to-disk mode activated.")
-            elif not should_spill and self._spill_active:
-                self._spill_active = False
-                logger.info("[MEMORY] Spill-to-disk mode deactivated.")
+                self._spill_active = True
+                logger.info("[MEMORY] Spill-to-disk mode activated.")
 
     def put(self, item: Any) -> None:
         self._update_spill_state()

@@ -42,6 +42,20 @@ def test_spill_activation_uses_disk_queue_when_threshold_reached(tmp_path):
     queue.close()
 
 
+def test_sqlite_backed_queue_uses_disk_immediately_when_configured(tmp_path):
+    queue = HybridQueue(
+        memory_monitor=StaticMemoryMonitor(0, threshold=80),
+        storage_path=str(tmp_path / "immediate.db"),
+        storage_backend="sqlite",
+    )
+
+    queue.put({"item": 1})
+    assert queue.ram_queue.size() == 0
+    assert queue.disk_queue.size() == 1
+    assert queue.get() == {"item": 1}
+    queue.close()
+
+
 def test_queue_persistence_and_recovery_after_restart(tmp_path):
     path = tmp_path / "persist.db"
     queue = DiskQueue(str(path))

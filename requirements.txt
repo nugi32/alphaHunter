@@ -1,0 +1,13 @@
+# Core data analysis
+numpy
+pandas
+matplotlib
+
+# Machine learning / pattern utilities
+scikit-learn
+
+# Report template rendering
+Jinja2
+
+# Test support
+pytest

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-PERIODS = [5, 8, 9, 10, 13, 14, 20, 21, 34, 50, 55, 89, 100, 144, 200, 233]
+PERIODS = [5, 8, 13, 20, 21, 34]
 
 
 def _wma(series, period):
